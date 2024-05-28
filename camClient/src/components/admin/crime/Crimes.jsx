@@ -16,6 +16,7 @@ import {
   Pagination,
   Autocomplete,
   AutocompleteItem,
+  Button,
 } from "@nextui-org/react";
 
 export default function Crimes({ accessToken }) {
@@ -30,7 +31,7 @@ export default function Crimes({ accessToken }) {
   const [totalCount, setTotalCount] = useState(0);
   const printRef = React.useRef();
 
-  const entriesPerPage = 8;
+  const entriesPerPage = 20;
 
   // SELECT OPTIONS
   const crimeTypeOpt = [
@@ -345,181 +346,191 @@ export default function Crimes({ accessToken }) {
   ];
 
   return (
-    <div className="flex flex-col gap-2 w-full p-3 bg-white text-sm">
-      <div className="border-b-2 border-slate-200 p-2">
-        <p>Filter:</p>
-        <div className="flex gap-2 justify-end items-center w-full">
-          <div className="flex flex-col gap-2 w-1/2">
-            <label htmlFor="" className="ps-2">
-              Barangay
-            </label>
-            <Autocomplete
-              aria-label="Barangay"
-              placeholder="Select Barangay"
-              value={barangay}
-              onInputChange={(value) => setBarangay(value)}>
-              {barangayOpt.map((option) => (
-                <AutocompleteItem
-                  key={option.value}
-                  value={option.label}
-                  textValue={option.label}>
-                  {option.label}
-                </AutocompleteItem>
-              ))}
-            </Autocomplete>
+    <div className="w-full h-full p-2 sm:p-5 shadow-lg rounded-sm bg-white">
+      <div className="flex flex-col">
+        <div className="flex flex-col">
+          <div className="flex justify-between items-center">
+            <p className="font-bold text-2xl">CRIME LIST</p>
+            <Button
+              variant="light"
+              startContent={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-printer-fill"
+                  viewBox="0 0 16 16">
+                  <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                  <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                </svg>
+              }
+              onClick={handlePrint}>
+              Print
+            </Button>
           </div>
 
-          <div className="flex flex-col gap-2 w-1/2">
-            <label htmlFor="" className="ps-2">
-              Crime Type
-            </label>
-            <NextSelect
-              aria-label="Crime Type"
-              placeholder="Select Crime Type"
-              value={crimeType}
-              onChange={(e) => setCrimeType(e.target.value)}>
-              {crimeTypeOpt.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </NextSelect>
-          </div>
-
-          {crimeType && (
-            <div className="flex flex-col gap-2 w-full">
-              <label htmlFor="" className="ps-2">
-                Offense
-              </label>
-              <Autocomplete
-                aria-label="Offense"
-                placeholder="Select Offense"
-                value={offense}
-                onInputChange={(value) => setOffense(value)}>
-                {offenseOpt
-                  .filter((option) => {
-                    if (crimeType === "index") {
-                      return isIndexCrime(option.label);
-                    } else {
-                      return !isIndexCrime(option.label);
-                    }
-                  })
-                  .map((option) => (
+          <div className="mt-2">
+            <div className="flex gap-2 justify-end items-center w-full">
+              <div className="flex flex-col gap-2 w-1/2">
+                <label htmlFor="" className="ps-2">
+                  Barangay
+                </label>
+                <Autocomplete
+                  aria-label="Barangay"
+                  placeholder="Select Barangay"
+                  value={barangay}
+                  onInputChange={(value) => setBarangay(value)}>
+                  {barangayOpt.map((option) => (
                     <AutocompleteItem
                       key={option.value}
-                      value={option.value}
+                      value={option.label}
                       textValue={option.label}>
                       {option.label}
                     </AutocompleteItem>
                   ))}
-              </Autocomplete>
+                </Autocomplete>
+              </div>
+
+              <div className="flex flex-col gap-2 w-1/2">
+                <label htmlFor="" className="ps-2">
+                  Crime Type
+                </label>
+                <NextSelect
+                  aria-label="Crime Type"
+                  placeholder="Select Crime Type"
+                  value={crimeType}
+                  onChange={(e) => setCrimeType(e.target.value)}>
+                  {crimeTypeOpt.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </NextSelect>
+              </div>
+
+              {crimeType && (
+                <div className="flex flex-col gap-2 w-full">
+                  <label htmlFor="" className="ps-2">
+                    Offense
+                  </label>
+                  <Autocomplete
+                    aria-label="Offense"
+                    placeholder="Select Offense"
+                    value={offense}
+                    onInputChange={(value) => setOffense(value)}>
+                    {offenseOpt
+                      .filter((option) => {
+                        if (crimeType === "index") {
+                          return isIndexCrime(option.label);
+                        } else {
+                          return !isIndexCrime(option.label);
+                        }
+                      })
+                      .map((option) => (
+                        <AutocompleteItem
+                          key={option.value}
+                          value={option.value}
+                          textValue={option.label}>
+                          {option.label}
+                        </AutocompleteItem>
+                      ))}
+                  </Autocomplete>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-2 w-1/2">
+                <label htmlFor="" className="ps-2">
+                  Year
+                </label>
+                <Autocomplete
+                  aria-label="Year"
+                  placeholder="Select Year"
+                  value={year}
+                  onInputChange={(value) => {
+                    setYear(value);
+                  }}>
+                  {yearOpt.map((option) => (
+                    <AutocompleteItem
+                      key={option.value}
+                      value={option.value}
+                      textValue={option.label.toString()}>
+                      {option.label}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
+              </div>
+
+              <div className="flex flex-col gap-2 w-1/2">
+                <label htmlFor="" className="ps-2">
+                  Month
+                </label>
+                <Autocomplete
+                  aria-label="Month"
+                  placeholder="Select Month"
+                  value={month}
+                  onInputChange={(value) => setMonth(value)}>
+                  {monthOpt.map((option) => (
+                    <AutocompleteItem
+                      key={option.value}
+                      value={option.label}
+                      textValue={option.label}>
+                      {option.label}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
+              </div>
             </div>
-          )}
-
-          <div className="flex flex-col gap-2 w-1/2">
-            <label htmlFor="" className="ps-2">
-              Year
-            </label>
-            <Autocomplete
-              aria-label="Year"
-              placeholder="Select Year"
-              value={year}
-              onInputChange={(value) => {
-                setYear(value);
-              }}>
-              {yearOpt.map((option) => (
-                <AutocompleteItem
-                  key={option.value}
-                  value={option.value}
-                  textValue={option.label.toString()}>
-                  {option.label}
-                </AutocompleteItem>
-              ))}
-            </Autocomplete>
+            <hr className="my-5" />
           </div>
-
-          <div className="flex flex-col gap-2 w-1/2">
-            <label htmlFor="" className="ps-2">
-              Month
-            </label>
-            <Autocomplete
-              aria-label="Month"
-              placeholder="Select Month"
-              value={month}
-              onInputChange={(value) => setMonth(value)}>
-              {monthOpt.map((option) => (
-                <AutocompleteItem
-                  key={option.value}
-                  value={option.label}
-                  textValue={option.label}>
-                  {option.label}
-                </AutocompleteItem>
-              ))}
-            </Autocomplete>
-          </div>
-
-          <button
-            className="flex gap-2 items-center hover:text-slate-600 duration-200"
-            onClick={handlePrint}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-printer-fill"
-              viewBox="0 0 16 16">
-              <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
-              <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-            </svg>
-            Print
-          </button>
         </div>
+
+        <div className="py-2 px-2 bg-slate-100 flex items-center rounded-xl mb-3">
+          <p className="font-semibold text-slate-600">
+            Total Cases: <span className="font-bold">{totalCount}</span>
+          </p>
+        </div>
+        <Table
+          ref={printRef}
+          aria-label="Table Crimes"
+          bottomContent={
+            totalPages > 0 ? (
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="default"
+                  page={currentPage}
+                  total={totalPages}
+                  onChange={(page) => setCurrentPage(page)}
+                />
+              </div>
+            ) : null
+          }>
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.key} className="text-center">
+                {column.label}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody
+            items={datas}
+            emptyContent={"No rows to display."}
+            loadingContent={<Spinner />}>
+            {(item) => (
+              <TableRow key={item.id} className="text-center">
+                {(columnKey) => {
+                  return (
+                    <TableCell className="text-xs">{item[columnKey]}</TableCell>
+                  );
+                }}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
-      <div className="py-2 px-2 bg-slate-100 flex items-center">
-        <p className="font-semibold text-slate-600">
-          Total Cases: <span className="font-bold">{totalCount}</span>
-        </p>
-      </div>
-      <Table
-        ref={printRef}
-        aria-label="Table Crimes"
-        bottomContent={
-          totalPages > 0 ? (
-            <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="default"
-                page={currentPage}
-                total={totalPages}
-                onChange={(page) => setCurrentPage(page)}
-              />
-            </div>
-          ) : null
-        }>
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key} className="text-center">
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={datas}
-          emptyContent={"No rows to display."}
-          loadingContent={<Spinner />}>
-          {(item) => (
-            <TableRow key={item.id} className="text-center">
-              {(columnKey) => {
-                return (
-                  <TableCell className="text-xs">{item[columnKey]}</TableCell>
-                );
-              }}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
     </div>
   );
 }

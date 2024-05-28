@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import io from "socket.io-client";
+import { Button } from "@nextui-org/react";
 const socket = io.connect("http://localhost:3001");
 
 export default function PersonModal({
@@ -15,6 +16,13 @@ export default function PersonModal({
   const [credentials, setCredentials] = useState(selected);
   const [image, setImage] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
+
+  const [isImageChanged, setIsImageChanged] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(selected.url || null);
+    setCredentials(selected);
+  }, [selected]);
 
   const typeOpt = !selected.id
     ? [
@@ -75,18 +83,18 @@ export default function PersonModal({
   const handleAddressChange = (e) => {
     setCredentials({ ...credentials, last_known_address: e.target.value });
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      setImgSrc(URL.createObjectURL(file)); // Set the image src for preview
+      setImgSrc(URL.createObjectURL(file));
+      setIsImageChanged(true);
     } else {
       setImgSrc(null);
       setImage(null);
+      setIsImageChanged(false);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!credentials.type)
@@ -161,7 +169,13 @@ export default function PersonModal({
               {/* UPLOAD */}
               <div className="flex flex-col gap-1">
                 <img
-                  src={!imgSrc ? "http://localhost:3000/default.jpg" : imgSrc}
+                  src={
+                    !imgSrc
+                      ? "http://localhost:3000/default.jpg"
+                      : isImageChanged
+                      ? imgSrc
+                      : `data:image/jpeg;base64,${imgSrc}`
+                  }
                   className="w-40"
                 />
                 <input
@@ -314,24 +328,21 @@ export default function PersonModal({
               </div>
             </div>
             {/*footer*/}
-            <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-              <button
-                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button"
+            <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b gap-3">
+              <Button
+                color="danger"
+                variant="light"
                 onClick={() => [handleModal(false), setSelected({})]}>
-                Close
-              </button>
-              <button
-                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="button"
-                onClick={handleSubmit}>
+                CLOSE
+              </Button>
+
+              <Button color="success" onClick={handleSubmit}>
                 SUBMIT
-              </button>
+              </Button>
             </div>
           </div>
         </form>
       </div>
-      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </>
   );
 }

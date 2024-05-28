@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import {
-  Pagination,
-  Card,
-  Switch,
-  PopoverContent,
-  Popover,
-  PopoverTrigger,
-  Tooltip,
-} from "@nextui-org/react";
+import { Pagination, Card, Tooltip, Tabs, Tab } from "@nextui-org/react";
 import { GiWantedReward } from "react-icons/gi";
 import { GrDocumentMissing } from "react-icons/gr";
 
@@ -26,21 +18,6 @@ function DisplayWanted() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const entriesPerPage = 10;
-
-  const columns = [
-    { key: "url", label: "Image" },
-    { key: "first_name", label: "First Name" },
-    { key: "last_name", label: "Last Name" },
-    { key: "middle_name", label: "Middle Name" },
-    { key: "gender", label: "Gender" },
-    { key: "last_known_address", label: "Address" },
-    { key: "alias", label: "Alias" },
-    { key: "height", label: "Height" },
-    { key: "weight", label: "Weight" },
-    { key: "status", label: "Status" },
-    { key: "type", label: "Type" },
-    { key: "created_at", label: "Reported Date" },
-  ];
 
   const getPerson = async () => {
     axios
@@ -75,118 +52,36 @@ function DisplayWanted() {
 
   return (
     <div>
-      {/* <Table
-        aria-label="Person of Concern Table"
-        bottomContent={
-          totalPages > 0 ? (
-            <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="default"
-                page={currentPage}
-                total={totalPages}
-                onChange={(page) => setCurrentPage(page)}
-              />
-            </div>
-          ) : null
-        }>
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key} className="text-center">
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={personList}
-          emptyContent={"No rows to display."}
-          loadingContent={<Spinner />}>
-          {(item, index) => (
-            <TableRow
-              key={`${item.first_name}-${item.last_name}-${item.middle_name}`}
-              className="text-center">
-              {(columnKey) => {
-                if (columnKey === "url") {
-                  return (
-                    <TableCell className="flex justify-center items-center">
-                      <img
-                        className="w-32"
-                        src={
-                          item[columnKey]
-                            ? `data:image/jpeg;base64,${item[columnKey]}`
-                            : "http://localhost:3000/default.jpg"
-                        }
-                        alt="ID"
-                      />
-                    </TableCell>
-                  );
-                }
-
-                return (
-                  <TableCell className="text-xs">{item[columnKey]}</TableCell>
-                );
-              }}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table> */}
-
-      {/* <Popover key={person.id} placement="top" color={"default"}>
-                <PopoverTrigger>
- </PopoverTrigger>
-                {currentList && (
-                  <PopoverContent>
-                    <>
-                      <div className="text-large font-bold">
-                        {currentList.first_name} {currentList.last_name}
-                      </div>
-                      <div className="text-small">"{currentList.alias}"</div>
-                      <div className="text-small">
-                        {new Date(currentList.created_at).toLocaleDateString(
-                          "en-US",
-                          { year: "numeric", month: "long", day: "numeric" }
-                        )}{" "}
-                        (RD)
-                      </div>
-                      <div className="text-small">
-                        {currentList.gender.charAt(0).toUpperCase() +
-                          currentList.gender.slice(1)}
-                      </div>
-                      <div className="text-small">
-                        {currentList.last_known_address}
-                      </div>
-                      <div className="text-small">
-                        {currentList.weight && `${currentList.weight} kg`}
-                        {currentList.weight && currentList.height && " | "}
-                        {currentList.height && `${currentList.height} cm`}
-                      </div>
-                      <div className="text-small font-semibold font-serif text-red-500">
-                        {currentList.status}
-                      </div>
-                    </>
-                  </PopoverContent>
-                )}
-              </Popover>  */}
-
       {personList ? (
         <div className="flex flex-col justify-center items-center gap-10">
           <div className="w-full flex justify-between items-center">
             <h1 className="text-2xl font-semibold">{filter}</h1>
-            <Switch
-              defaultSelected
+            <Tabs
+              key="lg"
               size="lg"
-              color="default"
-              onChange={(e) => {
-                setFilter(
-                  e.target.checked ? "WANTED PERSON" : "MISSING PERSON"
-                );
-              }}
-              startContent={<GrDocumentMissing />}
-              endContent={<GiWantedReward />}>
-              {filter === "WANTED PERSON" ? "Wanted Person" : "Missing Person"}
-            </Switch>
+              aria-label="person-of-concern-select"
+              onSelectionChange={setFilter}>
+              <Tab
+                key="WANTED PERSON"
+                title={
+                  <div className="flex items-center space-x-2">
+                    <GrDocumentMissing />
+                    <span>WANTED PERSON</span>
+                  </div>
+                }
+                // title="WANTED PERSON"
+              />
+              <Tab
+                key="MISSING PERSON"
+                title={
+                  <div className="flex items-center space-x-2">
+                    <GiWantedReward />
+                    <span>MISSING PERSON</span>
+                  </div>
+                }
+                // title="MISSING PERSON"
+              />
+            </Tabs>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-7">
             {personList.map((person) => (
