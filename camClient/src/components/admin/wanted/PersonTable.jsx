@@ -74,7 +74,7 @@ export default function PersonTable({
         </tr>
       </thead>
       <tbody>
-        {personList[0] ? (
+        {personList[0] &&
           personList[0].map((person) => (
             <tr
               key={person.id}
@@ -130,10 +130,7 @@ export default function PersonTable({
                 </svg>
               </td>
             </tr>
-          ))
-        ) : (
-          <tr></tr>
-        )}
+          ))}
       </tbody>
     </table>
   );

@@ -120,7 +120,7 @@ router
 
         try {
             let sql = "";
-            sql = "SELECT * FROM person_of_concern WHERE type = ? AND first_name LIKE ? OR type = ? AND last_name LIKE ? OR type = ? AND last_known_address LIKE ?";
+            sql = "SELECT * FROM person_of_concern WHERE type = ? AND first_name LIKE ? OR type = ? AND last_name LIKE ? OR type = ? AND last_known_address LIKE ? ORDER BY created_at DESC";
 
 
             db.query(sql, credentials, (err, rows) => {
