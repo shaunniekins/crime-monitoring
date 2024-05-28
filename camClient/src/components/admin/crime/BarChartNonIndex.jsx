@@ -11,46 +11,75 @@ import {
 import { Select as NextSelect, SelectItem } from "@nextui-org/react";
 
 const BarChartNonIndex = ({ title, crimes }) => {
-  const [selectedBarangay, setSelectedBarangay] = useState("All");
+  const [selectedMonth, setSelectedMonth] = useState("All");
   const [selectedYear, setSelectedYear] = useState("All");
 
-  const barangays = useMemo(() => {
-    return crimes
-      ? ["All", ...new Set(crimes.map((crime) => crime.barangay))]
-      : [];
+  const months = useMemo(() => {
+    if (!crimes) return [];
+
+    const monthsSet = new Set(
+      crimes
+        .map((crime) => new Date(crime.date_committed).getMonth())
+        .filter((month) => !isNaN(month))
+    );
+
+    const sortedMonths = Array.from(monthsSet).sort((a, b) => b - a);
+
+    return ["All", ...sortedMonths];
   }, [crimes]);
 
   const years = useMemo(() => {
     if (!crimes) return [];
+
     const yearsSet = new Set(
       crimes
         .map((crime) => new Date(crime.date_committed).getFullYear())
         .filter((year) => !isNaN(year))
     );
+
     const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+
     return ["All", ...sortedYears];
   }, [crimes]);
 
   const formattedData = useMemo(() => {
     const counts = {};
+
     if (crimes) {
       crimes.forEach((crime) => {
         const { barangay, type, offense, date_committed } = crime;
-        const crimeYear = new Date(date_committed).getFullYear();
-        if (
-          (selectedBarangay !== "All" && barangay !== selectedBarangay) ||
-          (selectedYear !== "All" && crimeYear !== parseInt(selectedYear)) ||
-          type === "index"
-        ) {
+        const crimeDate = new Date(date_committed);
+        const crimeYear = crimeDate.getFullYear();
+        const crimeMonth = crimeDate.getMonth();
+
+        // Skip this crime if its year doesn't match the selected year
+        if (selectedYear !== "All" && crimeYear !== parseInt(selectedYear)) {
           return;
         }
-        let offenseName = offense.split(" - ")[0];
+
+        // Skip this crime if its month doesn't match the selected month
+        if (selectedMonth !== "All" && crimeMonth !== parseInt(selectedMonth)) {
+          return;
+        }
+
+        // Skip this crime if it's an index crime
+        if (type === "index") {
+          return;
+        }
+
+        // Initialize counts object for the barangay if not already exists
         counts[barangay] = counts[barangay] || { total_cases: 0, offenses: {} };
+
+        // Increment the total_cases count for the barangay
         counts[barangay].total_cases++;
-        counts[barangay].offenses[offenseName] =
-          (counts[barangay].offenses[offenseName] || 0) + 1;
+
+        // Increment the count for the offense type
+        counts[barangay].offenses[offense] =
+          (counts[barangay].offenses[offense] || 0) + 1;
       });
     }
+
+    // Convert counts object to the desired format
     const result = Object.entries(counts).map(
       ([barangay, { total_cases, offenses }]) => ({
         barangay,
@@ -61,18 +90,35 @@ const BarChartNonIndex = ({ title, crimes }) => {
         })),
       })
     );
+
     return result;
-  }, [crimes, selectedBarangay, selectedYear]);
+  }, [crimes, selectedYear, selectedMonth]);
 
   useEffect(() => {
-    if (!selectedBarangay || selectedBarangay === "") {
-      setSelectedBarangay("All");
+    if (!selectedMonth || selectedMonth === "") {
+      setSelectedMonth("All");
     }
 
     if (!selectedYear || selectedYear === "") {
       setSelectedYear("All");
     }
-  }, [selectedBarangay, selectedYear]);
+  }, [selectedMonth, selectedYear]);
+
+  const monthNames = [
+    "All",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <div className="flex flex-col w-full h-[350px]">
@@ -80,14 +126,17 @@ const BarChartNonIndex = ({ title, crimes }) => {
         <p className="text-lg font-bold text-slate-500">{title}</p>
         <div className="w-3/12 flex gap-3">
           <NextSelect
-            label="Barangay"
-            aria-label="Select Barangay"
+            label="Month"
+            aria-label="Select Month"
             placeholder="All"
-            value={selectedBarangay}
-            onChange={(e) => setSelectedBarangay(e.target.value)}>
-            {barangays.map((barangay) => (
-              <SelectItem key={barangay} value={barangay} textValue={barangay}>
-                {barangay}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}>
+            {monthNames.map((month, index) => (
+              <SelectItem
+                key={index.toString()}
+                value={index.toString()}
+                textValue={month}>
+                {month}
               </SelectItem>
             ))}
           </NextSelect>

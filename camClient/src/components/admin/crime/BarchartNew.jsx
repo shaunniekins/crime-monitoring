@@ -8,17 +8,26 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import CustomTooltip from "./CustomTooltip";
 
 import { Select as NextSelect, SelectItem } from "@nextui-org/react";
 
 const BarChartNew = ({ title, crimes }) => {
-  const [selectedBarangay, setSelectedBarangay] = useState("All");
+  const [selectedMonth, setSelectedMonth] = useState("All");
   const [selectedYear, setSelectedYear] = useState("All");
 
-  const barangays = useMemo(() => {
-    return crimes
-      ? ["All", ...new Set(crimes.map((crime) => crime.barangay))]
-      : [];
+  const months = useMemo(() => {
+    if (!crimes) return [];
+
+    const monthsSet = new Set(
+      crimes
+        .map((crime) => new Date(crime.date_committed).getMonth())
+        .filter((month) => !isNaN(month))
+    );
+
+    const sortedMonths = Array.from(monthsSet).sort((a, b) => b - a);
+
+    return ["All", ...sortedMonths];
   }, [crimes]);
 
   const years = useMemo(() => {
@@ -37,36 +46,78 @@ const BarChartNew = ({ title, crimes }) => {
 
   const formattedData = useMemo(() => {
     const counts = {};
+
     if (crimes) {
       crimes.forEach((crime) => {
         const { barangay, type, offense, date_committed } = crime;
-        const crimeYear = new Date(date_committed).getFullYear();
-        if (
-          (selectedBarangay !== "All" && barangay !== selectedBarangay) ||
-          (selectedYear !== "All" && crimeYear !== parseInt(selectedYear))
-        ) {
+        const crimeDate = new Date(date_committed);
+        const crimeYear = crimeDate.getFullYear();
+        const crimeMonth = crimeDate.getMonth();
+
+        // Skip this crime if its year doesn't match the selected year
+        if (selectedYear !== "All" && crimeYear !== parseInt(selectedYear)) {
           return;
         }
-        let offenseName = offense.split(" - ")[0];
-        counts[offenseName] = (counts[offenseName] || 0) + 1;
+
+        // Skip this crime if its month doesn't match the selected month
+        if (selectedMonth !== "All" && crimeMonth !== parseInt(selectedMonth)) {
+          return;
+        }
+
+        // Initialize counts object for the barangay if not already exists
+        counts[barangay] = counts[barangay] || { total_cases: 0, offenses: {} };
+
+        // If the crime type is index, increment the total_cases count for the barangay
+        if (type === "index") {
+          counts[barangay].total_cases++;
+
+          // Increment the count for the offense type
+          counts[barangay].offenses[offense] =
+            (counts[barangay].offenses[offense] || 0) + 1;
+        }
       });
     }
-    const result = Object.entries(counts).map(([offense, count]) => ({
-      offense,
-      count,
-    }));
+
+    // Convert counts object to the desired format
+    const result = Object.entries(counts).map(
+      ([barangay, { total_cases, offenses }]) => ({
+        barangay,
+        total_cases,
+        offenses: Object.entries(offenses).map(([offense, count]) => ({
+          offense,
+          count,
+        })),
+      })
+    );
+
     return result;
-  }, [crimes, selectedBarangay, selectedYear]);
+  }, [crimes, selectedYear, selectedMonth]);
 
   useEffect(() => {
-    if (!selectedBarangay || selectedBarangay === "") {
-      setSelectedBarangay("All");
+    if (!selectedMonth || selectedMonth === "") {
+      setSelectedMonth("All");
     }
 
     if (!selectedYear || selectedYear === "") {
       setSelectedYear("All");
     }
-  }, [selectedBarangay, selectedYear]);
+  }, [selectedMonth, selectedYear]);
+
+  const monthNames = [
+    "All",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <div className="flex flex-col w-[100%] h-[350px]">
@@ -74,14 +125,17 @@ const BarChartNew = ({ title, crimes }) => {
         <p className="text-lg font-bold text-slate-500">{title}</p>
         <div className="w-3/12 flex gap-3">
           <NextSelect
-            label="Barangay"
-            aria-label="Select Barangay"
+            label="Month"
+            aria-label="Select Month"
             placeholder="All"
-            value={selectedBarangay}
-            onChange={(e) => setSelectedBarangay(e.target.value)}>
-            {barangays.map((barangay) => (
-              <SelectItem key={barangay} value={barangay} textValue={barangay}>
-                {barangay}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}>
+            {monthNames.map((month, index) => (
+              <SelectItem
+                key={index.toString()} // change this to match the value prop
+                value={index.toString()}
+                textValue={month}>
+                {month}
               </SelectItem>
             ))}
           </NextSelect>
@@ -106,15 +160,22 @@ const BarChartNew = ({ title, crimes }) => {
           className="text-xs">
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            dataKey="offense"
-            tick={{ fontSize: 10 }}
-            angle={-90}
+            dataKey="barangay"
+            tick={{ fontSize: 14 }}
             textAnchor="end"
             interval={0}
           />
-          <YAxis dataKey="count" domain={[0, "auto"]} />
-          <Tooltip />
-          <Bar dataKey="count" fill="#dc143c" />
+          <YAxis dataKey="total_cases" domain={[0, 500]} />
+          <Tooltip
+            content={
+              <CustomTooltip
+                payload={formattedData}
+                className="overflow-auto"
+              />
+            }
+            className="overflow-auto"
+          />
+          <Bar dataKey="total_cases" fill="#dc143c" />
         </BarChart>
       </ResponsiveContainer>
     </div>

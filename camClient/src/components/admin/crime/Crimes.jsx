@@ -23,11 +23,11 @@ export default function Crimes({ accessToken }) {
   const [datas, setDatas] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [offense, setOffense] = useState(null);
-  const [barangay, setBarangay] = useState(null);
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
-  const [crimeType, setCrimeType] = useState(null);
+  const [offense, setOffense] = useState("Select Offense");
+  const [barangay, setBarangay] = useState("Select Barangay");
+  const [year, setYear] = useState("Select Year");
+  const [month, setMonth] = useState("Select Month");
+  const [crimeType, setCrimeType] = useState("Select Crime Type");
   const [totalCount, setTotalCount] = useState(0);
   const printRef = React.useRef();
 
@@ -35,11 +35,13 @@ export default function Crimes({ accessToken }) {
 
   // SELECT OPTIONS
   const crimeTypeOpt = [
+    { label: "Select Crime Type", value: "Select Crime Type" },
     { label: "Index Crimes", value: "index" },
     { label: "Non-Index Crimes", value: "non-index" },
   ];
 
   const offenseOpt = [
+    { label: "Select Offense", value: "Select Offense" },
     { label: "Under Investigation", value: "Under Investigation" },
     {
       label: "ALARMS AND SCANDALS  - RPC Art. 155",
@@ -233,6 +235,7 @@ export default function Crimes({ accessToken }) {
   ];
 
   let barangayOpt = [
+    { label: "Select Barangay", value: "Select Barangay" },
     { label: "Consuelo", value: "Consuelo" },
     { label: "San Teodoro", value: "San Teodoro" },
     { label: "Bunawan Brook", value: "Bunawan Brook" },
@@ -246,6 +249,7 @@ export default function Crimes({ accessToken }) {
   ];
 
   const monthOpt = [
+    { label: "Select Month", value: "Select Month" },
     { label: "January", value: 1 },
     { label: "February", value: 2 },
     { label: "March", value: 3 },
@@ -276,12 +280,12 @@ export default function Crimes({ accessToken }) {
     );
   };
 
-  useEffect(() => {
-    setOffense("");
-  }, [crimeType]);
+  // useEffect(() => {
+  //   setOffense("");
+  // }, [crimeType]);
 
   const currentYear = new Date().getFullYear();
-  const yearOpt = [];
+  const yearOpt = [{ label: "Select Year", value: "Select Year" }];
 
   for (let year = currentYear; 2000 <= year; year--) {
     yearOpt.push({ label: year, value: year });
@@ -301,10 +305,10 @@ export default function Crimes({ accessToken }) {
         params: {
           page: currentPage,
           limit: entriesPerPage,
-          offense: offense,
-          barangay: barangay,
-          year: year,
-          month: monthNumber,
+          offense: offense === "Select Offense" ? null : offense,
+          barangay: barangay === "Select Barangay" ? null : barangay,
+          year: year === "Select Year" ? null : year,
+          month: monthNumber === "Select Month" ? null : monthNumber,
         },
       })
       .then((res) => {
@@ -432,7 +436,13 @@ export default function Crimes({ accessToken }) {
                 <label htmlFor="" className="ps-2">
                   Barangay
                 </label>
-                <Autocomplete
+                <Select
+                  placeholder="Select Barangay"
+                  options={barangayOpt}
+                  value={{ label: barangay, value: barangay }}
+                  onChange={(e) => setBarangay(e.value)}
+                />
+                {/* <Autocomplete
                   aria-label="Barangay"
                   placeholder="Select Barangay"
                   value={barangay}
@@ -445,14 +455,21 @@ export default function Crimes({ accessToken }) {
                       {option.label}
                     </AutocompleteItem>
                   ))}
-                </Autocomplete>
+                </Autocomplete> */}
               </div>
 
               <div className="flex flex-col gap-2 w-1/2">
                 <label htmlFor="" className="ps-2">
                   Crime Type
                 </label>
-                <NextSelect
+                <Select
+                  options={crimeTypeOpt}
+                  value={{ label: crimeType, value: crimeType }}
+                  onChange={(e) => {
+                    setCrimeType(e.value);
+                    setOffense("Select Offense");
+                  }}></Select>
+                {/* <NextSelect
                   aria-label="Crime Type"
                   placeholder="Select Crime Type"
                   value={crimeType}
@@ -462,15 +479,31 @@ export default function Crimes({ accessToken }) {
                       {option.label}
                     </SelectItem>
                   ))}
-                </NextSelect>
+                </NextSelect> */}
               </div>
 
-              {crimeType && (
+              {crimeType && crimeType !== "Select Crime Type" && (
                 <div className="flex flex-col gap-2 w-full">
                   <label htmlFor="" className="ps-2">
                     Offense
                   </label>
-                  <Autocomplete
+                  <Select
+                    options={offenseOpt
+                      .filter((option) => {
+                        if (crimeType === "index") {
+                          return isIndexCrime(option.label);
+                        } else {
+                          return !isIndexCrime(option.label);
+                        }
+                      })
+                      .map((option) => ({
+                        label: option.label,
+                        value: option.value,
+                      }))}
+                    value={{ label: offense, value: offense }}
+                    onChange={(e) => setOffense(e.value)}
+                  />
+                  {/* <Autocomplete
                     aria-label="Offense"
                     placeholder="Select Offense"
                     value={offense}
@@ -491,7 +524,7 @@ export default function Crimes({ accessToken }) {
                           {option.label}
                         </AutocompleteItem>
                       ))}
-                  </Autocomplete>
+                  </Autocomplete> */}
                 </div>
               )}
 
@@ -499,7 +532,11 @@ export default function Crimes({ accessToken }) {
                 <label htmlFor="" className="ps-2">
                   Year
                 </label>
-                <Autocomplete
+                <Select
+                  options={yearOpt}
+                  value={{ label: year, value: year }}
+                  onChange={(e) => setYear(e.value)}></Select>
+                {/* <Autocomplete
                   aria-label="Year"
                   placeholder="Select Year"
                   value={year}
@@ -514,14 +551,18 @@ export default function Crimes({ accessToken }) {
                       {option.label}
                     </AutocompleteItem>
                   ))}
-                </Autocomplete>
+                </Autocomplete> */}
               </div>
 
               <div className="flex flex-col gap-2 w-1/2">
                 <label htmlFor="" className="ps-2">
                   Month
                 </label>
-                <Autocomplete
+                <Select
+                  options={monthOpt}
+                  value={{ label: month, value: month }}
+                  onChange={(e) => setMonth(e.value)}></Select>
+                {/* <Autocomplete
                   aria-label="Month"
                   placeholder="Select Month"
                   value={month}
@@ -534,9 +575,25 @@ export default function Crimes({ accessToken }) {
                       {option.label}
                     </AutocompleteItem>
                   ))}
-                </Autocomplete>
+                </Autocomplete> */}
+              </div>
+              <div className="flex flex-col gap-2 w-32">
+                <label htmlFor="" className="ps-2">
+                  Action
+                </label>
+                <Button
+                  onClick={() => {
+                    setOffense("Select Offense");
+                    setBarangay("Select Barangay");
+                    setYear("Select Year");
+                    setMonth("Select Month");
+                    setCrimeType("Select Crime Type");
+                  }}>
+                  Reset
+                </Button>
               </div>
             </div>
+
             <hr className="my-5" />
           </div>
         </div>
@@ -578,6 +635,34 @@ export default function Crimes({ accessToken }) {
             {(item) => (
               <TableRow key={item.id} className="text-center">
                 {(columnKey) => {
+                  if (columnKey === "id") {
+                    return (
+                      <TableCell className="text-xs">
+                        <Button
+                          onClick={() => {
+                            setCrimeType(
+                              isIndexCrime(item.offense) ? "index" : "non-index"
+                            );
+                            setBarangay(item.barangay);
+                            setOffense(item.offense);
+                            setYear(item.date_committed.split("-")[0]);
+                            setMonth(
+                              monthOpt.find(
+                                (option) =>
+                                  option.label ===
+                                  new Date(item.date_committed).toLocaleString(
+                                    "en-US",
+                                    { month: "long" }
+                                  )
+                              )?.label
+                            );
+                          }}>
+                          {item[columnKey]}
+                        </Button>
+                      </TableCell>
+                    );
+                  }
+
                   return (
                     <TableCell className="text-xs">{item[columnKey]}</TableCell>
                   );
