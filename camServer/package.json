@@ -2,10 +2,10 @@
   "name": "camserver",
   "version": "1.0.0",
   "description": "",
-  "main": "server.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server"
+    "dev": "nodemon index",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
