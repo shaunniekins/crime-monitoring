@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { clientUrl } from "../../../urlConfig";
 
 const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
   useEffect(() => {
@@ -2242,18 +2243,18 @@ const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
 
     // Create polygons
     if (crimes && crimes.length > 0) {
-    polygons.forEach((polygonData) => {
-      const polygon = new window.google.maps.Polygon({
-        paths: polygonData.coordinates,
-        strokeColor: "#ffffff",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: polygonData.fillColor,
-        fillOpacity: 0.6,
+      polygons.forEach((polygonData) => {
+        const polygon = new window.google.maps.Polygon({
+          paths: polygonData.coordinates,
+          strokeColor: "#ffffff",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: polygonData.fillColor,
+          fillOpacity: 0.6,
+        });
+        polygon.setMap(map);
       });
-      polygon.setMap(map);
-    });
-  }
+    }
 
     // Create markers for each crime
     const infowindow = new window.google.maps.InfoWindow();
@@ -2269,8 +2270,8 @@ const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
         icon: {
           url:
             crime.type === "index"
-              ? "http://localhost:3000/mark1.svg"
-              : "http://localhost:3000/mark2.svg",
+              ? `${clientUrl}/mark1.svg`
+              : `${clientUrl}/mark2.svg`,
           scaledSize: new window.google.maps.Size(32, 32),
         },
       });

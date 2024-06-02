@@ -20,8 +20,9 @@ import { Button } from "@nextui-org/react";
 import PersonOfConcern from "./components/admin/wanted/PersonOfConcern";
 import PersonTable from "./components/admin/wanted/PersonTable";
 import DisplayWanted from "./components/DisplayWanted";
+import { serverUrl } from "./urlConfig";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(serverUrl);
 
 const barangayColors = {
   Consuelo: "bg-gray-600",

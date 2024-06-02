@@ -17,14 +17,13 @@ export default function UploadID({ credentials }) {
       position: toast.POSITION.TOP_LEFT,
       autoClose: 2000,
     });
-  }; 
+  };
   const showSuccessMessage = (message) => {
     toast.success(message, {
       position: toast.POSITION.TOP_LEFT,
-      autoClose: 3000,
+      autoClose: 3001,
     });
   };
-
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -33,27 +32,24 @@ export default function UploadID({ credentials }) {
   const handleUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      console.log(file)
+      formData.append("file", file);
+      console.log(file);
       await axios.post(`/api/uploadID?email=${credentials.email}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
 
-      showSuccessMessage("File successfully uploaded.")
+      showSuccessMessage("File successfully uploaded.");
       setTimeout(() => {
-        
-      navigate("/signIn");
+        navigate("/signIn");
       }, 4000);
     } catch (error) {
-      showErrorMessage("Error uploading file: " + error)
+      showErrorMessage("Error uploading file: " + error);
     }
   };
 
-
   return (
-
     <div className="w-full flex flex-col justify-center items-center gap-10 p-4 h-96 bg-white rounded-md sm:w-4/6 md:w-3/6 md:rounded-tr-md md:rounded-br-md md:rounded-tl-none md:rounded-bl-none">
       <p>Upload your I.D here.</p>
       <div>

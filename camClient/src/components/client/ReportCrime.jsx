@@ -13,15 +13,21 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+import { serverUrl } from "../../urlConfig";
+const socket = io.connect(serverUrl);
 
-
-export default function ReportCrime({ user, accessToken, history, update, setUpdate}) {
+export default function ReportCrime({
+  user,
+  accessToken,
+  history,
+  update,
+  setUpdate,
+}) {
   const [details, setDetails] = useState({
     officer_id: user.id,
     region: "Caraga Region XIII",
     province: "Agusan del Sur",
-    city: "Bunawan"
+    city: "Bunawan",
   });
   const [loading, setLoading] = useState(false);
 
@@ -298,35 +304,44 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
   let barangayOpt = [
     {
       label: "Consuelo",
-      value: "Consuelo"
-    }, {
+      value: "Consuelo",
+    },
+    {
       label: "San Teodoro",
-      value: "San Teodoro"
-    }, {
+      value: "San Teodoro",
+    },
+    {
       label: "Bunawan Brook",
-      value: "Bunawan Brook"
-    }, {
+      value: "Bunawan Brook",
+    },
+    {
       label: "Libertad",
-      value: "Libertad"
-    }, {
+      value: "Libertad",
+    },
+    {
       label: "San Andres",
-      value: "San Andres"
-    }, {
+      value: "San Andres",
+    },
+    {
       label: "Imelda",
-      value: "Imelda"
-    }, {
+      value: "Imelda",
+    },
+    {
       label: "Poblacion",
-      value: "Poblacion"
-    }, {
+      value: "Poblacion",
+    },
+    {
       label: "Mambalili",
-      value: "Mambalili"
-    }, {
+      value: "Mambalili",
+    },
+    {
       label: "Nueva Era",
-      value: "Nueva Era"
-    }, {
+      value: "Nueva Era",
+    },
+    {
       label: "San Marcos",
-      value: "San Marcos"
-    }
+      value: "San Marcos",
+    },
   ];
 
   // GET FUNCTIONS
@@ -395,20 +410,22 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!details.offense) return showErrorMessage("Please select offense.")
-    if (!details.barangay) return showErrorMessage("Please select barangay.")
-    console.log(details)
+    if (!details.offense) return showErrorMessage("Please select offense.");
+    if (!details.barangay) return showErrorMessage("Please select barangay.");
+    console.log(details);
     await axios
       .post("/crime", details)
       .then(async (res) => {
         console.log(res);
         setLoading(false);
-        showSuccessMessage("Crime Reported Successfully.")
-        socket.emit('send_report', { message: "Hello" })
-        setDetails({...details, offense: "", barangay: ""});
-        setUpdate(!update)
-        await axios.post('/history', { officer_id: user.id })
-          .then(res => console.log(res)).catch(error => console.log(error))
+        showSuccessMessage("Crime Reported Successfully.");
+        socket.emit("send_report", { message: "Hello" });
+        setDetails({ ...details, offense: "", barangay: "" });
+        setUpdate(!update);
+        await axios
+          .post("/history", { officer_id: user.id })
+          .then((res) => console.log(res))
+          .catch((error) => console.log(error));
       })
       .catch((error) => {
         console.log(error);
@@ -424,23 +441,23 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            setDetails({...details,
+            setDetails({
+              ...details,
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
           },
           (error) => {
-            console.error('Error getting location:', error.message);
+            console.error("Error getting location:", error.message);
           }
         );
       } else {
-        console.error('Geolocation is not supported by your browser');
+        console.error("Geolocation is not supported by your browser");
       }
     };
 
     getLocation();
   }, []); // Empty dependency array to ensure useEffect runs only once on mount
-
 
   // USE EFFECTS
 
@@ -468,8 +485,9 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
               <label htmlFor="">Offense</label>
               <Select
                 options={crimeTypeOpt}
-                value={{label: details.offense, value: details.offense}}
-                onChange={(e) => setDetails({ ...details, offense: e.value })} />
+                value={{ label: details.offense, value: details.offense }}
+                onChange={(e) => setDetails({ ...details, offense: e.value })}
+              />
             </div>
             <div>Address:</div>
             <div className="flex flex-col sm:flex-row sm:gap-2">
@@ -478,13 +496,19 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
                 <div className="flex w-3/6 flex-col">
                   <label className="ps-2">Region</label>
                   <Select
-                    defaultValue={{ label: details.region, value: details.region }}
+                    defaultValue={{
+                      label: details.region,
+                      value: details.region,
+                    }}
                   />
                 </div>
                 <div className="flex w-3/6 flex-col">
                   <label className="ps-2">Provinces</label>
                   <Select
-                    defaultValue={{ label: details.province, value: details.province }}
+                    defaultValue={{
+                      label: details.province,
+                      value: details.province,
+                    }}
                   />
                 </div>
               </div>
@@ -500,7 +524,7 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
                   <label className="ps-2">Barangay</label>
                   <Select
                     options={barangayOpt}
-                    value={{label: details.barangay, value: details.barangay}}
+                    value={{ label: details.barangay, value: details.barangay }}
                     onChange={(e) =>
                       setDetails({ ...details, barangay: e.value })
                     }
@@ -529,7 +553,6 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
                   }
                 />
               </div>
-
             </div>
             <div className="flex gap-2">
               <div className="flex justify-between gap-2 items-center w-3/6">
@@ -585,8 +608,7 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
             <button
               className="bg-emerald-500 w-2/6 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
-              onClick={handleSubmit}
-            >
+              onClick={handleSubmit}>
               SUBMIT REPORT
             </button>
           </div>
@@ -595,15 +617,21 @@ export default function ReportCrime({ user, accessToken, history, update, setUpd
       <div className="w-1/6 bg-white mt-6 rounded-md p-2 max-h-96 overflow-y-scroll">
         <p className="font-bold">Reported History</p>
 
-        {
-          !history ? <>Loading...</> :
-            history.map((data) => (
-              <div className="w-full p-2 border-b-2 border-slate-300">
-                <p><span className="font-semibold">Offense:</span> {data.offense}</p>
-                <p><span className="font-semibold">Date:</span>  {getSpecificDate(data.created_at)}</p>
-              </div>
-            ))
-        }
+        {!history ? (
+          <>Loading...</>
+        ) : (
+          history.map((data) => (
+            <div className="w-full p-2 border-b-2 border-slate-300">
+              <p>
+                <span className="font-semibold">Offense:</span> {data.offense}
+              </p>
+              <p>
+                <span className="font-semibold">Date:</span>{" "}
+                {getSpecificDate(data.created_at)}
+              </p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

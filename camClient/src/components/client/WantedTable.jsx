@@ -1,4 +1,5 @@
 import React from "react";
+import { clientUrl } from "../../urlConfig";
 
 export default function WantedTable({ setShowWantedTable, wantedHistory }) {
   const currentTimestamp = Date.now();
@@ -69,7 +70,7 @@ export default function WantedTable({ setShowWantedTable, wantedHistory }) {
                           src={
                             data.url
                               ? `data:image/jpeg;base64,${data.url}`
-                              : "http://localhost:3000/default.jpg"
+                              : `${clientUrl}/default.jpg`
                           }
                           className="w-20 rounded-md border-2 border-slate-100"
                         />

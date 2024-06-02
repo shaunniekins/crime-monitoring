@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { clientUrl } from "../../../urlConfig";
 
 const MapWithPolygon = ({ crimes, index, nonIndex }) => {
   useEffect(() => {
@@ -2252,8 +2253,8 @@ const MapWithPolygon = ({ crimes, index, nonIndex }) => {
         icon: {
           url:
             crime.type === "index"
-              ? "http://localhost:3000/mark1.png"
-              : "http://localhost:3000/mark2.png",
+              ? `${clientUrl}/mark1.png`
+              : `${clientUrl}/mark2.png`,
           scaledSize: new window.google.maps.Size(32, 32), // Adjust the size of the icon
         },
       });

@@ -1,6 +1,7 @@
 import React from "react";
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+import { serverUrl } from "../../urlConfig";
+const socket = io.connect(serverUrl);
 
 export default function ListCrimes({ reportedCrime }) {
   const getSpecificDate = (created_at) => {

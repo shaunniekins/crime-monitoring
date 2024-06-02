@@ -139,9 +139,6 @@ router
       sql =
         "SELECT * FROM person_of_concern WHERE type = ? AND first_name LIKE ? OR type = ? AND last_name LIKE ? OR type = ? AND last_known_address LIKE ? ORDER BY created_at DESC";
 
-      console.log("Inserting data:", credentials);
-      console.log("SQL query:", sql);
-
       db.query(sql, credentials, (err, rows) => {
         if (err) {
           console.log(`Server error controller/officer/get: ${err}`);
@@ -228,9 +225,6 @@ router
             values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       credentials.push(imageBase64);
     }
-    console.log("Inserting data:", credentials);
-    console.log("SQL query:", sql);
-
 
     try {
       db.query(sql, credentials, (err, rows) => {

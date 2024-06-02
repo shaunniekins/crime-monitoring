@@ -15,7 +15,8 @@ import io from "socket.io-client";
 import Crimes from "../components/admin/crime/Crimes";
 import CrimeIndex from "../components/admin/crime/CrimeIndex";
 import FirstPage from "../components/admin/crime/FirstPage";
-const socket = io.connect("http://localhost:3001");
+import { serverUrl } from "../urlConfig";
+const socket = io.connect(serverUrl);
 
 export default function Admin() {
   const cookies = new Cookies({ path: "/" });

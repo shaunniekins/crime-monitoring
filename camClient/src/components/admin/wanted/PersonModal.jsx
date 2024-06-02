@@ -5,7 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import io from "socket.io-client";
 import { Button } from "@nextui-org/react";
-const socket = io.connect("http://localhost:3001");
+import { clientUrl, serverUrl } from "../../../urlConfig";
+const socket = io.connect(serverUrl);
 
 export default function PersonModal({
   handleModal,
@@ -171,7 +172,7 @@ export default function PersonModal({
                 <img
                   src={
                     !imgSrc
-                      ? "http://localhost:3000/default.jpg"
+                      ? `${clientUrl}/default.jpg`
                       : isImageChanged
                       ? imgSrc
                       : `data:image/jpeg;base64,${imgSrc}`

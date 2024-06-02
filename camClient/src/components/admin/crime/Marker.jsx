@@ -1,5 +1,6 @@
 import { useGoogleMap } from "@ubilabs/google-maps-react-hooks";
 import React, { useEffect, useRef } from "react";
+import { clientUrl } from "../../../urlConfig";
 
 export default function Marker({ selectedCrime, currentLocation, crimes }) {
   const map = useGoogleMap();
@@ -10,8 +11,8 @@ export default function Marker({ selectedCrime, currentLocation, crimes }) {
   if (selectedCrime[0]) {
     // lat = selectedCrime[0].latitude;
     // lng = selectedCrime[0].longitude;
-    lat = 8.2165
-    lng = 126.0458
+    lat = 8.2165;
+    lng = 126.0458;
   }
   const getSpecificDate = (created_at) => {
     const options = {
@@ -33,11 +34,11 @@ export default function Marker({ selectedCrime, currentLocation, crimes }) {
     currentMarkRef.current = new window.google.maps.Marker({
       map,
       title: "Your current location",
-      icon: "http://localhost:3000/currentIcon.svg",
+      icon: `${clientUrl}/currentIcon.svg`,
     });
     markerRef.current = new window.google.maps.Marker({
       map,
-      icon: "http://localhost:3000/markIcon.svg",
+      icon: `${clientUrl}/markIcon.svg`,
     });
   }, [map]);
 
@@ -51,31 +52,28 @@ export default function Marker({ selectedCrime, currentLocation, crimes }) {
     //   lat,
     //   lng,
     // });
-    crimes.map(crime => {
+    crimes.map((crime) => {
       let lat = parseFloat(crime.latitude);
       let lng = parseFloat(crime.longitude);
       if (isNaN(lat) || isNaN(lng)) {
-        return
+        return;
       }
       markerRef.current.setPosition({
         lat,
         lng,
       });
-      markerRef.current.setIcon({ url: "http://localhost:3000/markIcon.svg" });
+      markerRef.current.setIcon({ url: `${clientUrl}/markIcon.svg` });
       // markerRef.current.setTitle(
       //   selectedCrime
       //     ? `Report No. : ${selectedCrime[0]?.report_number} \n crime : ${selectedCrime[0]?.type_of_crime
       //     } \n Date: ${getSpecificDate(selectedCrime[0]?.created_at)}`
       //     : ""
       // );
-    })
+    });
     currentMarkRef.current.setPosition({
       lat: 8.5168619,
       lng: 125.9807228,
     });
-
-
-
   }, [lat, lng, selectedCrime, map]);
 
   return <></>;

@@ -5,8 +5,9 @@ import PersonModal from "./PersonModal";
 import io from "socket.io-client";
 import { Tabs, Tab, Input, Button } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
+import { serverUrl } from "../../../urlConfig";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(serverUrl);
 
 export default function PersonOfConcern({ accessToken }) {
   const [personList, setPersonList] = useState([]);

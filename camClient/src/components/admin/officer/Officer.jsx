@@ -4,7 +4,8 @@ import OfficerTable from "./OfficerTable";
 import OfficerModal from "./OfficerModal";
 import io from "socket.io-client";
 import { Button } from "@nextui-org/react";
-const socket = io.connect("http://localhost:3001");
+import { serverUrl } from "../../../urlConfig";
+const socket = io.connect(serverUrl);
 
 export default function Officer({ accessToken, user }) {
   const [officerList, setOfficerList] = useState([]);

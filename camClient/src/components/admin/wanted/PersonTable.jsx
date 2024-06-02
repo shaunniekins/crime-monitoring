@@ -16,8 +16,9 @@ import {
   Button,
 } from "@nextui-org/react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { clientUrl, serverUrl } from "../../../urlConfig";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(serverUrl);
 
 export default function PersonTable({
   personList,
@@ -110,7 +111,7 @@ export default function PersonTable({
                         src={
                           item.url
                             ? `data:image/jpeg;base64,${item.url}`
-                            : "http://localhost:3000/default.jpg"
+                            : `${clientUrl}/default.jpg`
                         }
                         alt={item.first_name}
                         className="w-32 rounded-md border-2 border-slate-100"

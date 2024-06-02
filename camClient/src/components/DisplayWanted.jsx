@@ -4,8 +4,9 @@ import io from "socket.io-client";
 import { Pagination, Card, Tooltip, Tabs, Tab } from "@nextui-org/react";
 import { GiWantedReward } from "react-icons/gi";
 import { GrDocumentMissing } from "react-icons/gr";
+import { clientUrl, serverUrl } from "../urlConfig";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(serverUrl);
 
 function DisplayWanted() {
   const [personList, setPersonList] = useState([]);
@@ -98,7 +99,7 @@ function DisplayWanted() {
                     src={
                       person.url
                         ? `data:image/jpeg;base64,${person.url}`
-                        : "http://localhost:3000/default.jpg"
+                        : `${clientUrl}/default.jpg`
                     }
                     alt={person.first_name}
                     className="w-full h-fit object-cover mb-2"

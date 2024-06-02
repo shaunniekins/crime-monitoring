@@ -14,7 +14,6 @@ router
     })
     .post((req, res) => {
         const { email, password } = req.body;
-        console.log(email, password)
         try {
             const sql = "SELECT * FROM user where email = ?";
             db.query(sql, email, async(err, rows) => {

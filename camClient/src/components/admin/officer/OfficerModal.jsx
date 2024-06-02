@@ -4,12 +4,13 @@ import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+import { serverUrl } from "../../../urlConfig";
+const socket = io.connect(serverUrl);
 
 export default function OfficerModal({
   handleModal,
   selectedOfficer,
-  accessToken
+  accessToken,
 }) {
   // CREDENTIAL'S STATE
   const [credentials, setCredentials] = useState({
@@ -21,7 +22,7 @@ export default function OfficerModal({
     birth_date: selectedOfficer.birth_date,
     address: selectedOfficer.address,
     activate: selectedOfficer.activate,
-    role: selectedOfficer.role
+    role: selectedOfficer.role,
   });
 
   const showErrorMessage = (message) => {
@@ -49,7 +50,7 @@ export default function OfficerModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOfficer.email === "") {
-      alert("add")
+      alert("add");
     } else {
       await axios
         .put(`/user?id=${credentials.id}`, credentials, {
@@ -58,14 +59,17 @@ export default function OfficerModal({
           },
         })
         .then((res) => {
-          showSuccessMessage(res.data.message)
-          socket.emit('send_update', { message: "Hello" })
-          setTimeout(()=>{handleModal(false)}, 2000)
-        }).catch(error => {
-          showErrorMessage(error)
+          showSuccessMessage(res.data.message);
+          socket.emit("send_update", { message: "Hello" });
+          setTimeout(() => {
+            handleModal(false);
+          }, 2000);
         })
+        .catch((error) => {
+          showErrorMessage(error);
+        });
     }
-  }
+  };
   return (
     <>
       <ToastContainer />
@@ -80,8 +84,7 @@ export default function OfficerModal({
               </h3>
               <button
                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                onClick={() => handleModal(false)}
-              >
+                onClick={() => handleModal(false)}>
                 <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                   ×
                 </span>
@@ -151,7 +154,6 @@ export default function OfficerModal({
                     })
                   }
                 />
-
               </div>
               {/* Third Row */}
               <div className="flex gap-2">
@@ -206,7 +208,10 @@ export default function OfficerModal({
                 <div className="flex w-6/12 flex-col">
                   <label className="ps-2">Role</label>
                   <Select
-                    defaultValue={{ label: credentials.role, value: credentials.role }}
+                    defaultValue={{
+                      label: credentials.role,
+                      value: credentials.role,
+                    }}
                     options={roleOpt}
                     onChange={(e) =>
                       setCredentials({ ...credentials, role: e.value })
@@ -229,15 +234,13 @@ export default function OfficerModal({
               <button
                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={() => handleModal(false)}
-              >
+                onClick={() => handleModal(false)}>
                 Close
               </button>
               <button
                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit}>
                 Save Changes
               </button>
             </div>

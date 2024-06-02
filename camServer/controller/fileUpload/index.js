@@ -89,19 +89,6 @@ router.route("/").post(upload.single("file"), async(req, res) => {
             message: `Internal Server Error, ${error}`,
         });
     }
-
-    // for (const row of data) {
-    //     // Construct the INSERT query dynamically based on the row data
-    //     const columns = Object.keys(row).join(', ');
-    //     const values = Object.values(row).map(value => connection.escape(value)).join(', ');
-    //     // const insertQuery = `INSERT INTO your_table_name (${columns}) VALUES (${values})`;
-
-    //     // // Execute the INSERT query
-    //     // await connection.query(insertQuery);
-    //     console.log(data[row])
-    // }
-
-    //     console.log(credentials)
 });
 
 module.exports = router;

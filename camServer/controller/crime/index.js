@@ -118,7 +118,6 @@ router
       validated,
     } = req.body;
     const id = req.query.id;
-    console.log(id);
     try {
       const sql = `UPDATE crime_reported SET barangay = ?, type_place = ?, date_reported = ?, time_reported = ?,
                           date_committed = ?, time_committed = ?, stages_felony = ?, offense = ?, case_status = ?, longitude = ?, latitude = ?, validated = ?
