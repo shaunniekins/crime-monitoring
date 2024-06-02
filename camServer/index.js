@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const { createServer } = require("node:http");
+const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { clientUrl, serverUrl } = require("./urlConfig");
 const server = createServer(app);
@@ -10,7 +10,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: clientUrl,
-    method: ["GET", "POST"],
+    methods: ["GET", "POST"],
     credentials: true
   },
 });
@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const port = serverUrl.split(":").pop();
+const port = process.env.PORT || serverUrl.split(":").pop();
 
 server.listen(port, () => {
   console.log(`Server is running at ${serverUrl}`);

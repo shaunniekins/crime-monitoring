@@ -1,7 +1,7 @@
 let serverUrl;
 
 if (process.env.NODE_ENV === "production") {
-  serverUrl = "https://crime-monitoring-backend.vercel.app/";
+  serverUrl = "https://crime-monitoring-backend.vercel.app";
 } else {
   serverUrl = "http://localhost:3001";
 }
