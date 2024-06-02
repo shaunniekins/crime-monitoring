@@ -45,4 +45,4 @@ app.get("*", (req, res) => {
   res.status(404).json({ error: "Not Found" });
 });
 
-module.exports = { app, server };
+module.exports = server;
