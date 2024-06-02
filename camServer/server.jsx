@@ -38,3 +38,8 @@ const port = serverUrl.split(":").pop();
 server.listen(port, () => {
   console.log(`Server is running at ${serverUrl}`);
 });
+
+// Catch-all route
+app.get("*", (req, res) => {
+  res.status(404).json({ error: "Not Found" });
+});
