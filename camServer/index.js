@@ -43,3 +43,5 @@ server.listen(port, () => {
 app.get("*", (req, res) => {
   res.status(404).json({ error: "Not Found" });
 });
+
+module.exports = { app, server };
