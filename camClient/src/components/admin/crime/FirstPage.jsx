@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import PolygonMap from "./PolygonMap";
 import { FaLocationDot } from "react-icons/fa6";
+import DisplayWanted from "../../DisplayWanted";
+import { Card, CardBody, Tab, Tabs } from "@nextui-org/react";
 
 const barangayColors = {
   Consuelo: "bg-gray-600",
@@ -356,155 +358,190 @@ export default function FirstPage({ crimes }) {
   };
 
   return (
-    <div className="bg-white gap-2 w-full">
-      <div className="flex relative">
-        <div className="w-full">
-          {updatedData && (
-            <PolygonMap crimes={filteredData} barangay={selectedBarangay} />
-          )}
-        </div>
-        <div className="w-56 py-3 px-2 absolute top-0 right-0 text-sm flex-flex-col bg-black">
-          <select
-            name="filter-barangay"
-            id="filter-barangay"
-            onChange={(e) => setSelectedBarangay(e.target.value)}
-            className="px-3 py-2 rounded-lg mb-3 w-full">
-            <option value="">Select Barangay</option>
-            {barangayList.map((barangay) => (
-              <option value={barangay} key={barangay}>
-                {barangay}
-              </option>
-            ))}
-          </select>
-          <select
-            name="filter-year"
-            id="filter-year"
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="px-3 py-2 rounded-lg mb-3 w-full">
-            <option value="all">All Years</option>
-            {years.map((year) => (
-              <option value={year} key={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <select
-            name="filter-crime-type"
-            id="filter-crime-type"
-            onChange={(e) => setSelectedCrimeType(e.target.value)}
-            className="px-3 py-2 rounded-lg w-full">
-            <option value="all">All Crimes</option>
-            <option value="index">Index Crimes</option>
-            <option value="non-index">Non-Index Crimes</option>
-          </select>
+    <div className="w-full">
+      <Tabs aria-label="Options">
+        <Tab key="crime" title="Crime">
+          <Card>
+            <CardBody>
+              <div className="flex relative">
+                <div className="w-full">
+                  {updatedData && (
+                    <PolygonMap
+                      crimes={filteredData}
+                      barangay={selectedBarangay}
+                    />
+                  )}
+                </div>
+                <div className="w-56 py-3 px-2 absolute top-0 right-0 text-sm flex-flex-col bg-black">
+                  <select
+                    name="filter-barangay"
+                    id="filter-barangay"
+                    onChange={(e) => setSelectedBarangay(e.target.value)}
+                    className="px-3 py-2 rounded-lg mb-3 w-full">
+                    <option value="">Select Barangay</option>
+                    {barangayList.map((barangay) => (
+                      <option value={barangay} key={barangay}>
+                        {barangay}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="filter-year"
+                    id="filter-year"
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="px-3 py-2 rounded-lg mb-3 w-full">
+                    <option value="all">All Years</option>
+                    {years.map((year) => (
+                      <option value={year} key={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="filter-crime-type"
+                    id="filter-crime-type"
+                    onChange={(e) => setSelectedCrimeType(e.target.value)}
+                    className="px-3 py-2 rounded-lg w-full">
+                    <option value="all">All Crimes</option>
+                    <option value="index">Index Crimes</option>
+                    <option value="non-index">Non-Index Crimes</option>
+                  </select>
 
-          {selectedCrimeType === "index" && (
-            <select
-              name="filter-index-crime"
-              id="filter-index-crime"
-              onChange={(e) => setSelectedIndexCrime(e.target.value)}
-              className="px-3 py-2 rounded-lg mt-3 w-full">
-              <option value="">All Index Crimes</option>
-              {offenseOpt
-                .filter((opt) =>
-                  indexCrimes.some((crime) =>
-                    opt.label.toLowerCase().includes(crime.toLowerCase())
-                  )
-                )
-                .map((crime) => (
-                  <option value={crime.value} key={crime.value}>
-                    {crime.label
-                      .split(" ")
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}
-                  </option>
-                ))}
-            </select>
-          )}
-
-          {selectedCrimeType === "non-index" && (
-            <select
-              name="filter-non-index-crime"
-              id="filter-non-index-crime"
-              onChange={(e) => setSelectedNonIndexCrime(e.target.value)}
-              className="px-3 py-2 rounded-lg mt-3 w-full">
-              <option value="">All Non-Index Crimes</option>
-              {offenseOpt
-                .filter(
-                  (opt) =>
-                    !indexCrimes.some((crime) =>
-                      opt.label.toLowerCase().includes(crime.toLowerCase())
-                    )
-                )
-                .map((opt) => (
-                  <option value={opt.value} key={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-            </select>
-          )}
-
-          {Object.entries(counts).map(
-            ([barangay, { index, nonIndex, other }]) => (
-              <div
-                key={barangay}
-                className={`flex justify-between items-center gap-2 p-1 mt-3 text-xs ${getBarangayColor(
-                  barangay
-                )}`}>
-                <p className="text-white p-2 font-bold">{barangay}</p>
-                {selectedCrimeType === "all" ? (
-                  <>
-                    <div className="text-white">
-                      <p className="text-xs">
-                        Index: <span className="font-semibold">{index}</span>
-                      </p>
-                      <p className="text-xs">
-                        Non-Index:{" "}
-                        <span className="font-semibold">{nonIndex}</span>
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-white">
-                      <p className="text-xs">
-                        {selectedCrimeType === "index"
-                          ? `${selectedIndexCrime || "Index Crimes"}: `
-                              .split(" ")
-                              .map(
-                                (word) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1)
-                              )
-                              .join(" ")
-                          : `${selectedNonIndexCrime || "Non-Index Crimes"}: `
+                  {selectedCrimeType === "index" && (
+                    <select
+                      name="filter-index-crime"
+                      id="filter-index-crime"
+                      onChange={(e) => setSelectedIndexCrime(e.target.value)}
+                      className="px-3 py-2 rounded-lg mt-3 w-full">
+                      <option value="">All Index Crimes</option>
+                      {offenseOpt
+                        .filter((opt) =>
+                          indexCrimes.some((crime) =>
+                            opt.label
+                              .toLowerCase()
+                              .includes(crime.toLowerCase())
+                          )
+                        )
+                        .map((crime) => (
+                          <option value={crime.value} key={crime.value}>
+                            {crime.label
                               .split(" ")
                               .map(
                                 (word) =>
                                   word.charAt(0).toUpperCase() + word.slice(1)
                               )
                               .join(" ")}
-                        <span className="font-semibold">
-                          {selectedCrimeType === "index" ? index : nonIndex}
-                        </span>
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-            )
-          )}
+                          </option>
+                        ))}
+                    </select>
+                  )}
 
-          {selectedCrimeType === "all" &&
-            filteredData &&
-            filteredData.length > 0 && (
-              <div className="mt-3 flex flex-col gap-1 text-white">
-                {getLegendItems()}
+                  {selectedCrimeType === "non-index" && (
+                    <select
+                      name="filter-non-index-crime"
+                      id="filter-non-index-crime"
+                      onChange={(e) => setSelectedNonIndexCrime(e.target.value)}
+                      className="px-3 py-2 rounded-lg mt-3 w-full">
+                      <option value="">All Non-Index Crimes</option>
+                      {offenseOpt
+                        .filter(
+                          (opt) =>
+                            !indexCrimes.some((crime) =>
+                              opt.label
+                                .toLowerCase()
+                                .includes(crime.toLowerCase())
+                            )
+                        )
+                        .map((opt) => (
+                          <option value={opt.value} key={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                    </select>
+                  )}
+
+                  {Object.entries(counts).map(
+                    ([barangay, { index, nonIndex, other }]) => (
+                      <div
+                        key={barangay}
+                        className={`flex justify-between items-center gap-2 p-1 mt-3 text-xs ${getBarangayColor(
+                          barangay
+                        )}`}>
+                        <p className="text-white p-2 font-bold">{barangay}</p>
+                        {selectedCrimeType === "all" ? (
+                          <>
+                            <div className="text-white">
+                              <p className="text-xs">
+                                Index:{" "}
+                                <span className="font-semibold">{index}</span>
+                              </p>
+                              <p className="text-xs">
+                                Non-Index:{" "}
+                                <span className="font-semibold">
+                                  {nonIndex}
+                                </span>
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="text-white">
+                              <p className="text-xs">
+                                {selectedCrimeType === "index"
+                                  ? `${selectedIndexCrime || "Index Crimes"}: `
+                                      .split(" ")
+                                      .map(
+                                        (word) =>
+                                          word.charAt(0).toUpperCase() +
+                                          word.slice(1)
+                                      )
+                                      .join(" ")
+                                  : `${
+                                      selectedNonIndexCrime ||
+                                      "Non-Index Crimes"
+                                    }: `
+                                      .split(" ")
+                                      .map(
+                                        (word) =>
+                                          word.charAt(0).toUpperCase() +
+                                          word.slice(1)
+                                      )
+                                      .join(" ")}
+                                <span className="font-semibold">
+                                  {selectedCrimeType === "index"
+                                    ? index
+                                    : nonIndex}
+                                </span>
+                              </p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )
+                  )}
+
+                  {selectedCrimeType === "all" &&
+                    filteredData &&
+                    filteredData.length > 0 && (
+                      <div className="mt-3 flex flex-col gap-1 text-white">
+                        {getLegendItems()}
+                      </div>
+                    )}
+                </div>
               </div>
-            )}
-        </div>
-      </div>
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="person-of-concern" title="Person of Concern">
+          <Card>
+            <CardBody>
+              <div className="container mx-auto h-full bg-gray-100 shadow-md p-3 m-2 rounded-lg text-center text-slate-500 font-bold">
+                <DisplayWanted />
+              </div>
+            </CardBody>
+          </Card>
+        </Tab>
+      </Tabs>
     </div>
   );
 }
