@@ -14,7 +14,7 @@ We use [Clever Cloud](https://www.clever-cloud.com) for MySQL hosting. To set up
 5. Choose the location for your add-on.
 
 ### Express
-We use [Vercel](https://vercel.com) for Express hosting.
+We use [Render](https://https://render.com/) for Express hosting.
 
 For local development, create a `.env` file with the following environment variable:
 
