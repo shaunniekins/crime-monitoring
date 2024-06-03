@@ -29,6 +29,9 @@ export default function ReportTracker({
 
   const [casePerYear, setCasePerYear] = useState([]);
   const [selectedCrimeCase, setSelectedCrimeCase] = useState("All");
+  const [selectedMonth, setSelectedMonth] = useState("All");
+
+  // console.log("crimes", crimes);
 
   const countCasesPerYear = async () => {
     await axios
@@ -76,41 +79,6 @@ export default function ReportTracker({
       });
     }
   }, [crimes]);
-
-  const barangayOffenseCounts = useMemo(() => {
-    const counts = {};
-
-    if (updatedData) {
-      // Iterate over the updatedData array
-      updatedData.forEach((crime) => {
-        const { barangay, type, offense } = crime;
-
-        // Initialize counts object for the barangay if not already exists
-        counts[barangay] = counts[barangay] || {};
-
-        // Initialize counts object for the offense type if not already exists
-        counts[barangay][type] = counts[barangay][type] || {};
-
-        // Increment the count for the offense type
-        counts[barangay][type][offense] =
-          (counts[barangay][type][offense] || 0) + 1;
-      });
-    }
-
-    // Convert counts object to the desired format
-    const result = Object.entries(counts).map(([barangay, offenses]) => ({
-      barangay,
-      ...Object.entries(offenses).map(([type, offenseCounts]) => ({
-        type,
-        offenses: Object.entries(offenseCounts).map(([offense, count]) => ({
-          offense,
-          count,
-        })),
-      })),
-    }));
-
-    return result;
-  }, [updatedData]);
 
   useEffect(() => {
     setUpdatedData(memoizedUpdatedDataList);
@@ -189,11 +157,11 @@ export default function ReportTracker({
           <div className="flex flex-col w-full bg-white rounded-md shadow-md p-2">
             <LineChart
               title={"Visualizing Trends: Total Cases Over Different Dates"}
-              crimes={crimes}
               totalCasesPerYear={totalCasesPerYear}
-              caseStatus={caseStatus}
               selectedCrimePerYear={selectedCrimePerYear}
               setSelectedCrimePerYear={setSelectedCrimePerYear}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
             />
           </div>
         </div>

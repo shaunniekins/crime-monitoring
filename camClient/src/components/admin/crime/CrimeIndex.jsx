@@ -70,55 +70,16 @@ export default function CrimeIndex({ accessToken }) {
         <img src="${process.env.PUBLIC_URL}/pnp-logo.png" alt="Logo" className="w-5 h-5 size-2" />
           <div class="flex flex-col justify-between items-center">
             <h2 class="">Republic of the Philippines</h2>
-            <h2 class="">Department of the Interior and Local Government</h2>
             <h2 class="">NATIONAL POLICE COMMISSION</h2>
             <h1 class="font-semibold">PHILIPPINE NATIONAL POLICE</h1>
             <h1 class="font-semibold">CRIMINAL INVESTAGTION AND DETECTION GROUP</h1>
-            <h2 class="">Bunawan, Agusan del Sur</h2>
+            <h2 class="">Camp Bgen Rafael T. Crame, Quezon City</h2>
           </div>
-          <img src="${process.env.PUBLIC_URL}/bunawan-pnp-logo.jpg" alt="Logo" className="w-5 h-5" />
+          <img src="${process.env.PUBLIC_URL}/bunawan-pnp-logo.jpg" alt="Logo" className="w-5 h-5" style="visibility: hidden;" />
         </div>
 
-        <div class="w-full mx-12 mr-20 mt-5 self-start flex items-start flex-col">
-          <h2>MEMORANDUM</h2>
-
-          <br />
-
-          <div class="w-full mx-12 flex items-start flex-col">
-            <h2 class="flex gap-16">
-              <span>FOR</span>
-              <span>:</span>
-              <span>Director, CIDG</span>
-            </h2>
-
-            <h2 class="pl-[10.1rem]">
-              <span>(Attn: C, IND)</span>
-            </h2>
-
-            <br />
-
-            <h2 class="flex gap-[3.1rem]">
-              <span>FROM</span>
-              <span>:</span>
-            </h2>
-
-            <br />
-
-            <h2 class="flex gap-[1.8rem]">
-              <span>SUBJECT</span>
-              <span>:</span>
-              <span class="pl-[2rem]">Incident Report</span>
-            </h2>
-
-            <br />
-
-            <h2 class="flex gap-[3.4rem]">
-              <span>DATE</span>
-              <span>:</span>
-            </h2>
-
-            <div class="w-[78svw] mr-20 h-1 mt-3 mb-10  border-b-2 border-black" />
-
+        <div class="w-full mt-5 self-start flex">
+          <div class="w-full h-1 mt-3 mb-10 border-b-2 border-black" />
           </div>
         </div>
       </div>

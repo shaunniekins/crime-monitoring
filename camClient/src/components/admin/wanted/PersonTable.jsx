@@ -25,6 +25,7 @@ export default function PersonTable({
   filter,
   handleModal,
   setSelected,
+  printRef,
 }) {
   const getSpecificDate = (created_at) => {
     const options = {
@@ -92,7 +93,7 @@ export default function PersonTable({
     <>
       <ToastContainer />
 
-      <Table aria-label="Person-Concern-Table">
+      <Table ref={printRef} aria-label="Person-Concern-Table">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key} className="text-center">
@@ -101,7 +102,7 @@ export default function PersonTable({
           )}
         </TableHeader>
         <TableBody
-          items={personList.length > 0 ? personList[0] : []}
+          items={personList.length > 0 ? personList : []}
           emptyContent={"No rows to display."}
           loadingContent={<Spinner />}>
           {(item) => (
