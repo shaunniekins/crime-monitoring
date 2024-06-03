@@ -186,8 +186,11 @@ router
       type,
       alias,
       officer_id,
-      height,
       weight,
+      height,
+      eye_color,
+      hair_color,
+      hair_style,
     } = req.body;
     const id = crypto.randomUUID().split("-")[4];
 
@@ -213,16 +216,19 @@ router
       type,
       alias,
       officer_id,
-      height,
       weight,
+      height,
+      eye_color,
+      hair_color,
+      hair_style
     ];
     let sql = "";
     if (!req.file) {
-      sql = `INSERT INTO person_of_concern (id, first_name, middle_name, last_name, gender, last_known_address, type, alias, officer_id, weight, height) 
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      sql = `INSERT INTO person_of_concern (id, first_name, middle_name, last_name, gender, last_known_address, type, alias, officer_id, weight, height, eye_color, hair_color, hair_style) 
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     } else {
-      sql = `INSERT INTO person_of_concern (id, first_name, middle_name, last_name, gender, last_known_address, type, alias, officer_id, weight, height, url) 
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      sql = `INSERT INTO person_of_concern (id, first_name, middle_name, last_name, gender, last_known_address, type, alias, officer_id, weight, height, eye_color, hair_color, hair_style, url) 
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       credentials.push(imageBase64);
     }
 
@@ -289,6 +295,9 @@ router
       url,
       weight,
       height,
+      eye_color,
+      hair_color,
+      hair_style,
       middle_name,
       remarks,
       status,
@@ -317,17 +326,20 @@ router
         middle_name,
         weight,
         height,
+        eye_color,
+      hair_color,
+      hair_style,
         remarks,
         status,
       ];
 
       let sql = "";
       if (!req.file) {
-        sql = `UPDATE person_of_concern SET first_name = ?, last_name = ?, gender = ?, last_known_address = ?, type = ?, alias = ?, officer_id = ?, middle_name = ?, weight = ?, height = ?, remarks = ?, status = ?
+        sql = `UPDATE person_of_concern SET first_name = ?, last_name = ?, gender = ?, last_known_address = ?, type = ?, alias = ?, officer_id = ?, middle_name = ?, weight = ?, height = ?, eye_color = ?, hair_color = ?, hair_style = ?, remarks = ?, status = ?
                     WHERE id = ?`;
         credentials.push(id);
       } else {
-        sql = `UPDATE person_of_concern SET first_name = ?, last_name = ?, gender = ?, last_known_address = ?, type = ?, alias = ?, officer_id = ?, middle_name = ?, weight = ?, height = ?, remarks = ?, status = ?, url = ?
+        sql = `UPDATE person_of_concern SET first_name = ?, last_name = ?, gender = ?, last_known_address = ?, type = ?, alias = ?, officer_id = ?, middle_name = ?, weight = ?, height = ?, eye_color = ?, hair_color = ?, hair_style = ?, remarks = ?, status = ?, url = ?
                     WHERE id = ?`;
         credentials.push(imageBase64, id);
       }
