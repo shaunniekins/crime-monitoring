@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { clientUrl, serverUrl } = require("./urlConfig");
+const server = createServer(app);
 
-const io = new Server({
+const io = new Server(server, {
   cors: {
-    origin: clientUrl,
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true
   },
@@ -32,9 +34,15 @@ io.on("connection", (socket) => {
   });
 });
 
+const port = process.env.PORT || serverUrl.split(":").pop();
+
+server.listen(port, () => {
+  console.log(`Server is running at ${serverUrl}`);
+});
+
 // Catch-all route
 app.get("*", (req, res) => {
   res.status(404).json({ error: "Not Found" });
 });
 
-module.exports = app;
+module.exports = server;
