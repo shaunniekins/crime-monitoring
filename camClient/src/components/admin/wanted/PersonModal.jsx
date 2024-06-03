@@ -6,6 +6,13 @@ import axios from "axios";
 import io from "socket.io-client";
 import { Button } from "@nextui-org/react";
 import { clientUrl, serverUrl } from "../../../urlConfig";
+import {
+  genderOpt,
+  typeOpt,
+  eyeColorOpt,
+  hairColorOpt,
+  hairStyleOpt,
+} from "../../options";
 const socket = io.connect(serverUrl);
 
 export default function PersonModal({
@@ -52,11 +59,6 @@ export default function PersonModal({
           { value: "Closed", label: "Closed" },
         ];
 
-  const genderOpt = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-  ];
-
   const showErrorMessage = (message) => {
     toast.error(message, {
       position: toast.POSITION.TOP_LEFT,
@@ -80,6 +82,15 @@ export default function PersonModal({
   };
   const handleGenderChange = (selected) => {
     setCredentials({ ...credentials, gender: selected.value });
+  };
+  const handleEyeColorChange = (selected) => {
+    setCredentials({ ...credentials, eye_color: selected.value });
+  };
+  const handleHairColorChange = (selected) => {
+    setCredentials({ ...credentials, hair_color: selected.value });
+  };
+  const handleHairStyleChange = (selected) => {
+    setCredentials({ ...credentials, hair_style: selected.value });
   };
   const handleAddressChange = (e) => {
     setCredentials({ ...credentials, last_known_address: e.target.value });
@@ -223,18 +234,29 @@ export default function PersonModal({
                     onChange={handleLastNameChange}
                   />
                 </div>
+                <div className="flex w-4/12 flex-col">
+                  <label className="ps-2">Alias</label>
+                  <input
+                    type="text"
+                    placeholder="Robert Baker"
+                    className="shadow-md px-3 py-1 rounded-md border-2 border-slate-400"
+                    value={credentials.alias}
+                    onChange={(e) =>
+                      setCredentials({ ...credentials, alias: e.target.value })
+                    }
+                  />
+                </div>
               </div>
               {/* Second Row */}
               <div className="flex gap-2">
-                <div className="flex w-4/12 flex-col">
-                  <label className="ps-2">Gender</label>
-                  <Select
-                    options={genderOpt}
-                    onChange={handleGenderChange}
-                    defaultValue={{
-                      label: credentials.gender,
-                      value: credentials.gender,
-                    }}
+                <div className="flex w-full flex-col">
+                  <label className="ps-2">Last Known Address</label>
+                  <input
+                    type="text"
+                    placeholder="Agusan del Sur"
+                    className="shadow-md px-3 py-1 rounded-md border-2 border-slate-400"
+                    value={credentials.last_known_address}
+                    onChange={handleAddressChange}
                   />
                 </div>
                 <div className="flex w-6/12 flex-col">
@@ -250,6 +272,21 @@ export default function PersonModal({
                     }
                   />
                 </div>
+              </div>
+
+              {/* Third Row */}
+              <div className="flex gap-2">
+                <div className="flex w-4/12 flex-col">
+                  <label className="ps-2">Gender</label>
+                  <Select
+                    options={genderOpt}
+                    onChange={handleGenderChange}
+                    defaultValue={{
+                      label: credentials.gender,
+                      value: credentials.gender,
+                    }}
+                  />
+                </div>
                 <div className="flex w-4/12 flex-col">
                   <label className="ps-2">Status</label>
                   <Select
@@ -261,33 +298,6 @@ export default function PersonModal({
                       label: credentials.status,
                       value: credentials.status,
                     }}
-                  />
-                </div>
-              </div>
-              {/* Third Row */}
-              <div className="flex gap-2">
-                <div className="flex w-full flex-col">
-                  <label className="ps-2">Last Known Address</label>
-                  <input
-                    type="text"
-                    placeholder="Agusan del Sur"
-                    className="shadow-md px-3 py-1 rounded-md border-2 border-slate-400"
-                    value={credentials.last_known_address}
-                    onChange={handleAddressChange}
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="flex w-4/12 flex-col">
-                  <label className="ps-2">Alias</label>
-                  <input
-                    type="text"
-                    placeholder="Robert Baker"
-                    className="shadow-md px-3 py-1 rounded-md border-2 border-slate-400"
-                    value={credentials.alias}
-                    onChange={(e) =>
-                      setCredentials({ ...credentials, alias: e.target.value })
-                    }
                   />
                 </div>
                 <div className="flex w-4/12 flex-col">
@@ -302,6 +312,8 @@ export default function PersonModal({
                     }
                   />
                 </div>
+              </div>
+              <div className="flex gap-2">
                 <div className="flex w-4/12 flex-col">
                   <label className="ps-2">Weight (kg)</label>
                   <input
@@ -312,6 +324,39 @@ export default function PersonModal({
                     onChange={(e) =>
                       setCredentials({ ...credentials, weight: e.target.value })
                     }
+                  />
+                </div>
+                <div className="flex w-4/12 flex-col">
+                  <label className="ps-2">Eye Color</label>
+                  <Select
+                    options={eyeColorOpt}
+                    onChange={handleEyeColorChange}
+                    defaultValue={{
+                      label: credentials.eye_color,
+                      value: credentials.eye_color,
+                    }}
+                  />
+                </div>
+                <div className="flex w-4/12 flex-col">
+                  <label className="ps-2">Hair Color</label>
+                  <Select
+                    options={hairColorOpt}
+                    onChange={handleHairColorChange}
+                    defaultValue={{
+                      label: credentials.hair_color,
+                      value: credentials.hair_color,
+                    }}
+                  />
+                </div>
+                <div className="flex w-4/12 flex-col">
+                  <label className="ps-2">Hair Style</label>
+                  <Select
+                    options={hairStyleOpt}
+                    onChange={handleHairStyleChange}
+                    defaultValue={{
+                      label: credentials.hair_style,
+                      value: credentials.hair_style,
+                    }}
                   />
                 </div>
               </div>

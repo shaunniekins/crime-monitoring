@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
-import {
-  regions,
-  provinces,
-  cities,
-  barangays,
-  regionByCode,
-  provincesByCode,
-  provinceByName,
-} from "select-philippines-address";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MissingTable from "./MissingTable";
 import { clientUrl } from "../../urlConfig";
+import {
+  genderOpt,
+  typeOpt,
+  eyeColorOpt,
+  hairColorOpt,
+  hairStyleOpt,
+} from "../options";
 
 export default function ReportMissing({
   user,
@@ -42,15 +40,6 @@ export default function ReportMissing({
       autoClose: 2000,
     });
   };
-
-  const genderOpt = [
-    { label: "male", value: "male" },
-    { label: "female", value: "female" },
-  ];
-  const typeOpt = [
-    { label: "MISSING PERSON", value: "MISSING PERSON" },
-    { label: "WANTED PERSON", value: "WANTED PERSON" },
-  ];
 
   const getSpecificDate = (created_at) => {
     const options = {
@@ -122,12 +111,15 @@ export default function ReportMissing({
         ...details,
         first_name: "",
         last_name: "",
+        middle_name: "",
         gender: "",
         alias: "",
         last_known_address: "",
-        height: "",
         weight: "",
-        middle_name: "",
+        height: "",
+        eye_color: "",
+        hair_color: "",
+        hair_style: "",
       });
     } catch (error) {
       showErrorMessage(error.response.data.error);
@@ -213,17 +205,6 @@ export default function ReportMissing({
                   }
                 />
               </div>
-            </div>
-            {/* 2nd Row */}
-            <div className="flex gap-2">
-              <div className="flex w-3/12 flex-col">
-                <label className="ps-2">Gender</label>
-                <Select
-                  options={genderOpt}
-                  value={{ label: details.gender, value: details.gender }}
-                  onChange={(e) => setDetails({ ...details, gender: e.value })}
-                />
-              </div>
               <div className="flex w-3/12 flex-col">
                 <label className="ps-2">Alias</label>
                 <input
@@ -234,6 +215,17 @@ export default function ReportMissing({
                   onChange={(e) =>
                     setDetails({ ...details, alias: e.target.value })
                   }
+                />
+              </div>
+            </div>
+            {/* 2nd Row */}
+            <div className="flex gap-2">
+              <div className="flex w-3/12 flex-col">
+                <label className="ps-2">Gender</label>
+                <Select
+                  options={genderOpt}
+                  value={{ label: details.gender, value: details.gender }}
+                  onChange={(e) => setDetails({ ...details, gender: e.value })}
                 />
               </div>
               <div className="flex w-3/12 flex-col">
@@ -260,6 +252,43 @@ export default function ReportMissing({
                   }
                 />
               </div>
+              <div className="flex w-3/12 flex-col">
+                <label className="ps-2">Eye Color</label>
+                <Select
+                  options={eyeColorOpt}
+                  value={{ label: details.eye_color, value: details.eye_color }}
+                  onChange={(e) =>
+                    setDetails({ ...details, eye_color: e.value })
+                  }
+                />
+              </div>
+              <div className="flex w-3/12 flex-col">
+                <label className="ps-2">Hair Color</label>
+                <Select
+                  options={hairColorOpt}
+                  value={{
+                    label: details.hair_color,
+                    value: details.hair_color,
+                  }}
+                  onChange={(e) =>
+                    setDetails({ ...details, hair_color: e.value })
+                  }
+                />
+              </div>
+
+              <div className="flex w-3/12 flex-col">
+                <label className="ps-2">Hair Style</label>
+                <Select
+                  options={hairStyleOpt}
+                  value={{
+                    label: details.hair_style,
+                    value: details.hair_style,
+                  }}
+                  onChange={(e) =>
+                    setDetails({ ...details, hair_style: e.value })
+                  }
+                />
+              </div>
             </div>
             <div className="flex w-6/6 flex-col">
               <label className="ps-2">Last Known Address</label>
@@ -276,6 +305,7 @@ export default function ReportMissing({
             <div className="flex w-6/6 flex-col">
               <label className="ps-2">Type</label>
               <Select
+                isDisabled={true}
                 defaultValue={{ label: details.type, value: details.type }}
                 onChange={(e) => setDetails({ ...details, type: e.value })}
               />
