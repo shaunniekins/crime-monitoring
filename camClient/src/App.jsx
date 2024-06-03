@@ -27,6 +27,7 @@ const barangayColors = {
   "San Teodoro": "bg-pink-300",
   Libertad: "bg-green-500",
   "San Andres": "bg-orange-400",
+  "San Teodoro": "bg-red-200",
   Imelda: "bg-purple-600",
   Poblacion: "bg-fuchsia-500",
   Mambalili: "bg-teal-600",
