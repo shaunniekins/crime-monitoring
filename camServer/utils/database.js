@@ -9,12 +9,27 @@ const {
     DB_PORT_SECRET
 } = process.env
 
-const db = mysql.createConnection({
+const pool = mysql.createPool({
     host: DB_HOST_SECRET,
     user: DB_USER_SECRET,
     password: DB_PASSWORD_SECRET,
     database: DB_NAME_SECRET,
-    port: DB_PORT_SECRET
-})
+    port: DB_PORT_SECRET,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
-module.exports = db;
+pool.on('acquire', function (connection) {
+    console.log('Connection %d acquired', connection.threadId);
+});
+
+pool.on('enqueue', function () {
+    console.log('Waiting for available connection slot');
+});
+
+pool.on('release', function (connection) {
+    console.log('Connection %d released', connection.threadId);
+});
+
+module.exports = pool;
