@@ -272,7 +272,9 @@ router.get("/countPerYearLineChart", (req, res) => {
         "theft",
         "carnapping",
       ];
-      const keywordConditions = keywords.map(keyword => `offense LIKE '%${keyword}%'`).join(" OR ");
+      const keywordConditions = keywords
+        .map((keyword) => `offense LIKE '%${keyword}%'`)
+        .join(" OR ");
       sql = `
         SELECT YEAR(date_committed) AS extracted_year, count(*) AS total_cases 
         FROM crime_reported 
@@ -293,7 +295,9 @@ router.get("/countPerYearLineChart", (req, res) => {
         "theft",
         "carnapping",
       ];
-      const keywordConditions = keywords.map(keyword => `offense NOT LIKE '%${keyword}%'`).join(" AND ");
+      const keywordConditions = keywords
+        .map((keyword) => `offense NOT LIKE '%${keyword}%'`)
+        .join(" AND ");
       sql = `
         SELECT YEAR(date_committed) AS extracted_year, count(*) AS total_cases 
         FROM crime_reported 
@@ -337,7 +341,6 @@ router.get("/countPerYearLineChart", (req, res) => {
     });
   }
 });
-
 
 router.get("/caseStatus", (req, res) => {
   try {
@@ -409,7 +412,9 @@ router.get("/caseStatusPerYearGraph", (req, res) => {
         "theft",
         "carnapping",
       ];
-      const keywordConditions = keywords.map(keyword => `offense LIKE '%${keyword}%'`).join(" OR ");
+      const keywordConditions = keywords
+        .map((keyword) => `offense LIKE '%${keyword}%'`)
+        .join(" OR ");
       sql = `
         SELECT validated, YEAR(date_committed) as year, 
           SUM(CASE WHEN case_status = 'Solved' THEN 1 ELSE 0 END) AS solved, 
@@ -432,7 +437,9 @@ router.get("/caseStatusPerYearGraph", (req, res) => {
         "theft",
         "carnapping",
       ];
-      const keywordConditions = keywords.map(keyword => `offense NOT LIKE '%${keyword}%'`).join(" AND ");
+      const keywordConditions = keywords
+        .map((keyword) => `offense NOT LIKE '%${keyword}%'`)
+        .join(" AND ");
       sql = `
         SELECT validated, YEAR(date_committed) as year, 
           SUM(CASE WHEN case_status = 'Solved' THEN 1 ELSE 0 END) AS solved, 
@@ -480,7 +487,6 @@ router.get("/caseStatusPerYearGraph", (req, res) => {
     });
   }
 });
-
 
 router.get("/reportedCrime", (req, res) => {
   const validated = req.query.validated;
@@ -646,18 +652,22 @@ router.get("/all", (req, res) => {
 });
 
 router.get("/index", (req, res) => {
-  const page = parseInt(req.query.page) || 1; // default page is 1
-  const limit = parseInt(req.query.limit) || 10; // default limit is 10
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
   const isIndex = req.query.isIndex;
+
   const q = req.query.q || null;
-  const offense = req.query.offense || "CLEAR";
+  
   const barangay = req.query.barangay || "CLEAR";
+  const offense = req.query.offense || "CLEAR";
   const year = req.query.year || "CLEAR";
+  const caseStatus = req.query.caseStatus || "CLEAR";
 
   try {
     const offset = (page - 1) * limit;
-    // sql = "SELECT barangay, COUNT(*) as total_cases FROM crime_reported WHERE validated = 1 GROUP BY barangay ORDER BY total_cases DESC";
     let sql = "";
+    const params1 = [];
+    const params2 = [];
 
     if (isIndex == "true") {
       sql = `SELECT COUNT(*) as totalCount
@@ -683,7 +693,25 @@ router.get("/index", (req, res) => {
                AND offense NOT LIKE '%Carnapping%')`;
     }
 
-    const params1 = [];
+    if (barangay !== "CLEAR") {
+      sql += " AND barangay = ?";
+      params1.push(barangay);
+    }
+
+    if (offense !== "CLEAR") {
+      sql += " AND offense = ?";
+      params1.push(offense);
+    }
+
+    if (year !== "CLEAR") {
+      sql += " AND YEAR(date_reported) = ?";
+      params1.push(year);
+    }
+
+    if (caseStatus !== "CLEAR") {
+      sql += " AND case_status = ?";
+      params1.push(caseStatus);
+    }
 
     db.query(sql, params1, (err, countResult) => {
       if (err) {
@@ -696,12 +724,9 @@ router.get("/index", (req, res) => {
 
       const totalCount = countResult[0].totalCount;
 
-      const params2 = [];
-
+      let queryCondition = "";
       if (isIndex == "true") {
-        sql = `SELECT *
-                FROM crime_reported
-                WHERE validated = 1
+        queryCondition = `WHERE validated = 1
                   AND (offense LIKE '%Murder%' 
                    OR offense LIKE '%Homicide%' 
                    OR offense LIKE '%Physical Injury%' 
@@ -710,9 +735,7 @@ router.get("/index", (req, res) => {
                    OR offense LIKE '%Theft%' 
                    OR offense LIKE '%Carnapping%')`;
       } else {
-        sql = `SELECT *
-                FROM crime_reported
-                WHERE validated = 1
+        queryCondition = `WHERE validated = 1
                   AND (offense NOT LIKE '%Murder%' 
                    AND offense NOT LIKE '%Homicide%' 
                    AND offense NOT LIKE '%Physical Injury%' 
@@ -722,7 +745,30 @@ router.get("/index", (req, res) => {
                    AND offense NOT LIKE '%Carnapping%')`;
       }
 
-      sql += " ORDER BY id DESC LIMIT ? OFFSET ?";
+      if (barangay !== "CLEAR") {
+        queryCondition += ` AND barangay = ?`;
+        params2.push(barangay);
+      }
+
+      if (offense !== "CLEAR") {
+        queryCondition += ` AND offense = ?`;
+        params2.push(offense);
+      }
+
+      if (year !== "CLEAR") {
+        queryCondition += ` AND YEAR(date_reported) = ?`;
+        params2.push(year);
+      }
+
+      if (caseStatus !== "CLEAR") {
+        queryCondition += ` AND case_status = ?`;
+        params2.push(caseStatus);
+      }
+
+      sql = `SELECT *
+              FROM crime_reported
+              ${queryCondition}
+              ORDER BY id DESC LIMIT ? OFFSET ?`;
       params2.push(limit, offset);
 
       db.query(sql, params2, (err, rows) => {
@@ -734,12 +780,10 @@ router.get("/index", (req, res) => {
           });
         }
 
-        // return res.status(200).json({
-        //     status: 200,
-        //     message: `Successfully retrieved ${rows.length} record/s`,
-        //     data: rows,
-        //     totalCount: totalCount // Include total count in the response
-        // });
+        if (rows.length === 0) {
+          console.log("No data found for the given filters.");
+        }
+
         return res.status(200).json({
           status: 200,
           message: `Successfully retrieved ${rows.length} record/s`,
