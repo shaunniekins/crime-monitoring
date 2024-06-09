@@ -33,6 +33,7 @@ export default function OfficerTable({
     { key: "id", label: "I.D" },
     { key: "first_name", label: "First Name" },
     { key: "last_name", label: "Last Name" },
+    { key: "phone_number", label: "Phone Number" },
     { key: "email", label: "Email" },
     { key: "url", label: "I.D Picture" },
     { key: "role", label: "Role" },

@@ -585,6 +585,7 @@ function App() {
                               }
                               className="px-3 py-2 rounded-lg mb-3 w-full">
                               <option value="">Select Barangay</option>
+                              <option value="all">All Barangay</option>
                               {barangayList.map((barangay) => (
                                 <option value={barangay} key={barangay}>
                                   {barangay}

@@ -10,19 +10,25 @@ export default function Header({
   activePage,
   handleActivePage,
   setAccessToken,
-  accessToken
+  accessToken,
 }) {
   const cookies = new Cookies({ path: "/" });
   return (
     <header className="w-full">
       <div className="w-full relative">
-        <img src={logo} alt="Design" className="absolute top-8 left-10 w-64 rounded-lg shadow-lg" />
+        <img
+          src={logo}
+          alt="Design"
+          className="absolute top-8 left-10 w-64 rounded-lg shadow-lg"
+        />
         <img src={headDesign} alt="Design" className="w-full" />
         <div className="w-full absolute bottom-0 bg-neutral-700 h-10 opacity-30"></div>
       </div>
       <nav className="flex justify-between items-center text-white p-2 sm:p-5 gap-2 bg-neutral-900">
         <div>
-          <p className="hover:text-slate-200 cursor-pointer" onClick={() => handleActivePage("home")}>
+          <p
+            className="hover:text-slate-200 cursor-pointer"
+            onClick={() => handleActivePage("home")}>
             Crime Monitoring
           </p>
         </div>
@@ -38,8 +44,7 @@ export default function Header({
                 cookies.remove("user");
                 setUser({});
                 setAccessToken("");
-              }}
-            >
+              }}>
               SIGN OUT
             </button>
           </div>
@@ -47,14 +52,12 @@ export default function Header({
           <div className="flex gap-2 items-center text-xs font-semibold">
             <Link
               to="/signIn"
-              className="text-xs font-semibold py-3 px-5 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg rounded-md text-white duration-200"
-            >
+              className="text-xs font-semibold py-3 px-5 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg rounded-md text-white duration-200">
               SIGN IN
             </Link>
             <Link
               to="/signUp"
-              className="text-xs font-semibold py-3 px-5 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg rounded-md text-white duration-200"
-            >
+              className="text-xs font-semibold py-3 px-5 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg rounded-md text-white duration-200">
               SIGN UP
             </Link>
           </div>
@@ -66,25 +69,21 @@ export default function Header({
             activePage === "crime" ? "text-yellow-600 bg-slate-200" : ""
           }
           `}
-          onClick={() => handleActivePage("crime")}
-          
-        >
+          onClick={() => handleActivePage("crime")}>
           REPORT CRIME
         </button>
         <button
           className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
             activePage === "wanted" ? "text-yellow-600 bg-slate-200" : ""
           }`}
-          onClick={() => handleActivePage("wanted")}
-        >
+          onClick={() => handleActivePage("wanted")}>
           REPORT WANTED PERSON
         </button>
         <button
           className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
             activePage === "missing" ? "text-yellow-600 bg-slate-200" : ""
           }`}
-          onClick={() => handleActivePage("missing")}
-        >
+          onClick={() => handleActivePage("missing")}>
           REPORT MISSING PERSON
         </button>
       </div>

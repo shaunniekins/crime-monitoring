@@ -65,19 +65,24 @@ export default function Crimes({ accessToken }) {
       (option) => option.label === month
     )?.value;
 
+    const params = {
+      page: currentPage,
+      limit: entriesPerPage,
+      offense: offense === "Select Offense" ? null : offense,
+      barangay: barangay === "Select Barangay" ? null : barangay,
+      year: year === "Select Year" ? null : year,
+    };
+
+    if (!isNaN(monthNumber)) {
+      params.month = monthNumber;
+    }
+
     await axios
       .get(`/crime/all`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        params: {
-          page: currentPage,
-          limit: entriesPerPage,
-          offense: offense === "Select Offense" ? null : offense,
-          barangay: barangay === "Select Barangay" ? null : barangay,
-          year: year === "Select Year" ? null : year,
-          month: monthNumber === "Select Month" ? null : monthNumber,
-        },
+        params: params,
       })
       .then((res) => {
         setDatas(res.data.data);
@@ -227,7 +232,7 @@ export default function Crimes({ accessToken }) {
                 <Select
                   options={monthOpt}
                   value={{ label: month, value: month }}
-                  onChange={(e) => setMonth(e.value)}></Select>
+                  onChange={(e) => setMonth(e.label)}></Select>
               </div>
               <div className="flex flex-col gap-2 w-32">
                 <label htmlFor="" className="ps-2">

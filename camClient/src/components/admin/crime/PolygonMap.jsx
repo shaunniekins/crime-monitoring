@@ -2285,7 +2285,7 @@ const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
     });
   }, [crimes]);
 
-  return <div id="map" style={{ width: "100%", height: "700px" }}></div>;
+  return <div id="map" style={{ width: "100%", height: "800px" }}></div>;
 };
 
 export default PolygonMap;

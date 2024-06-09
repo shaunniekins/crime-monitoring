@@ -3,8 +3,9 @@ import axios from "axios";
 import OfficerTable from "./OfficerTable";
 import OfficerModal from "./OfficerModal";
 import io from "socket.io-client";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { serverUrl } from "../../../urlConfig";
+import { SearchIcon } from "../wanted/SearchIcon";
 const socket = io.connect(serverUrl);
 
 export default function Officer({ accessToken, user }) {
@@ -20,6 +21,10 @@ export default function Officer({ accessToken, user }) {
     birth_date: "",
     address: "",
   });
+
+  // useEffect(() => {
+  //   console.log("officerList", officerList);
+  // }, [officerList]);
 
   const handleModal = (action) => {
     setModalOpen(action);
@@ -37,11 +42,17 @@ export default function Officer({ accessToken, user }) {
       });
     }
   };
+
+  const [keywords, setKeywords] = useState("");
+
   const getUser = async () => {
     axios
       .get(`/user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          keywords: keywords,
         },
       })
       .then((res) => {
@@ -51,7 +62,7 @@ export default function Officer({ accessToken, user }) {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [keywords]);
 
   const [isModalOpen, setModalOpen] = useState(false);
   socket.on("receive_update", (message) => {
@@ -72,10 +83,39 @@ export default function Officer({ accessToken, user }) {
         <div className="flex justify-between items-center">
           <p className="font-bold text-2xl">USER LIST</p>
           <div className="flex items-center gap-2">
-            <input
-              type="search"
-              className="w-full border-2 border-slate-400 p-2 rounded-md outline-none hidden"
-              placeholder="Search"
+            <Input
+              isClearable
+              onClear={() => setKeywords("")}
+              radius="lg"
+              classNames={{
+                label: "text-black/50 dark:text-white/90",
+                input: [
+                  "bg-transparent",
+                  "text-black/90 dark:text-white/90",
+                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                  "bg-default-200/50",
+                  "dark:bg-default/60",
+                  "backdrop-blur-xl",
+                  "backdrop-saturate-200",
+                  "hover:bg-default-200/70",
+                  "dark:hover:bg-default/70",
+                  "group-data-[focused=true]:bg-default-200/50",
+                  "dark:group-data-[focused=true]:bg-default/60",
+                  "!cursor-text",
+                ],
+              }}
+              placeholder="Type to search..."
+              value={keywords}
+              onChange={(e) => {
+                // setCurrentPage(1);
+                setKeywords(e.target.value);
+              }}
+              startContent={
+                <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+              }
             />
             <Button
               color="success"
