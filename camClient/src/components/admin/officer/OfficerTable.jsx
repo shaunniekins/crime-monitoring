@@ -8,7 +8,8 @@ import {
   TableCell,
   Spinner,
 } from "@nextui-org/react";
-import { MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
+import axios from "axios";
 
 import {
   Modal,
@@ -24,6 +25,8 @@ export default function OfficerTable({
   officerList,
   setSelectedOfficer,
   handleModal,
+  accessToken,
+  getUser,
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -46,6 +49,18 @@ export default function OfficerTable({
       setCurrentId(null);
     }
   }, [isOpen]);
+
+  const deleteUser = async (id) => {
+    await axios
+      .delete(`/user?id=${id}`)
+      .then((res) => {
+        getUser();
+        alert("User deleted successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -112,13 +127,30 @@ export default function OfficerTable({
                 if (columnKey === "action") {
                   return (
                     <TableCell className="h-full">
-                      <div className="flex justify-center items-center text-green-700 text-xl">
-                        <MdEdit
+                      <div className="flex justify-center items-center text-xl gap-3">
+                        <Button
+                          isIconOnly
+                          color="success"
                           onClick={() => {
                             setSelectedOfficer(item);
                             handleModal(true);
-                          }}
-                        />
+                          }}>
+                          <MdEdit className="text-white" />
+                        </Button>
+                        <Button
+                          isIconOnly
+                          color="danger"
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "Are you sure you want to delete this user?"
+                              )
+                            ) {
+                              deleteUser(item.id);
+                            }
+                          }}>
+                          <MdDelete />
+                        </Button>
                       </div>
                     </TableCell>
                   );

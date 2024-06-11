@@ -22,10 +22,6 @@ export default function Officer({ accessToken, user }) {
     address: "",
   });
 
-  // useEffect(() => {
-  //   console.log("officerList", officerList);
-  // }, [officerList]);
-
   const handleModal = (action) => {
     setModalOpen(action);
     if (action === false) {
@@ -65,6 +61,7 @@ export default function Officer({ accessToken, user }) {
   }, [keywords]);
 
   const [isModalOpen, setModalOpen] = useState(false);
+
   socket.on("receive_update", (message) => {
     getUser();
   });
@@ -133,6 +130,7 @@ export default function Officer({ accessToken, user }) {
               setSelectedOfficer={setSelectedOfficer}
               handleModal={handleModal}
               accessToken={accessToken}
+              getUser={getUser}
             />
           ) : (
             "Loading"

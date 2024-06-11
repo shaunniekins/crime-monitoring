@@ -223,8 +223,8 @@ router
       });
     }
   })
-  .delete(JWT.verifyAccessToken, (req, res) => {
-    const id = req.params.id;
+  .delete((req, res) => {
+    const id = req.query.id;
     try {
       const sql = "DELETE FROM user WHERE id = ?";
       db.query(sql, id, (err, rows) => {

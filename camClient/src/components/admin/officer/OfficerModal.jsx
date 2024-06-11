@@ -43,10 +43,12 @@ export default function OfficerModal({
     { value: 1, label: "True" },
     { value: 0, label: "False" },
   ];
+
   const roleOpt = [
     { value: "admin", label: "admin" },
     { value: "user", label: "user" },
   ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedOfficer.email === "") {
@@ -59,6 +61,7 @@ export default function OfficerModal({
           },
         })
         .then((res) => {
+          console.log("res", res.data);
           showSuccessMessage(res.data.message);
           socket.emit("send_update", { message: "Hello" });
           setTimeout(() => {
@@ -70,6 +73,7 @@ export default function OfficerModal({
         });
     }
   };
+
   return (
     <>
       <ToastContainer />

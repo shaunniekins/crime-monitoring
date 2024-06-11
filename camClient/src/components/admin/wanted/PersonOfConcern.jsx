@@ -79,12 +79,25 @@ export default function PersonOfConcern({ accessToken }) {
     }
 
     if (month !== "Select Month") {
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      const monthNumber = monthNames.indexOf(month) + 1;
       flattenedPersonList = flattenedPersonList.filter(
-        (person) =>
-          new Date(person.created_at).getMonth() + 1 === parseInt(month)
+        (person) => new Date(person.created_at).getMonth() + 1 === monthNumber
       );
     }
-
     return flattenedPersonList;
   };
 
@@ -241,7 +254,7 @@ export default function PersonOfConcern({ accessToken }) {
               <Select
                 options={monthOpt}
                 value={{ label: month, value: month }}
-                onChange={(e) => setMonth(e.value)}></Select>
+                onChange={(e) => setMonth(e.label)}></Select>
             </div>
           </div>
 
