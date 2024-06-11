@@ -18,7 +18,12 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Select as NextSelect, SelectItem } from "@nextui-org/react";
-import { barangayOpt1, offenseOpt, offenseOpt1 } from "../../options";
+import {
+  barangayOpt1,
+  indexCrimes,
+  offenseOpt,
+  offenseOpt1,
+} from "../../options";
 
 export default function CrimeIndex({ accessToken }) {
   const [datas, setDatas] = useState([]);
@@ -119,6 +124,27 @@ export default function CrimeIndex({ accessToken }) {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedBarangay, selectedOffense, selectedYear, selectedCaseStatus]);
+
+  const [filteredOffenseOpt1, setFilteredOffenseOpt1] = useState(offenseOpt1);
+
+  const isIndexCrimeFunction = () => {
+    const filtered = offenseOpt1.filter((option) => {
+      if (isIndexCrime === "true") {
+        return indexCrimes.some((keyword) =>
+          option.label.toLowerCase().includes(keyword)
+        );
+      } else {
+        return !indexCrimes.some((keyword) =>
+          option.label.toLowerCase().includes(keyword)
+        );
+      }
+    });
+    setFilteredOffenseOpt1(filtered);
+  };
+
+  useEffect(() => {
+    isIndexCrimeFunction();
+  }, [isIndexCrime, offenseOpt1]);
 
   const handlePrint = useReactToPrint({
     content: () => {
@@ -230,7 +256,7 @@ export default function CrimeIndex({ accessToken }) {
                 <SelectItem key={"CLEAR"} value={"CLEAR"} textValue={"All"}>
                   All
                 </SelectItem>
-                {offenseOpt1.map((option) => (
+                {filteredOffenseOpt1.map((option) => (
                   <SelectItem
                     key={option.value}
                     value={option.value}
