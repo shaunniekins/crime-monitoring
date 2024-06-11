@@ -1,19 +1,53 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
 import headDesign from "../../assets/header.jpg";
 import logo from "../../assets/logo.png";
+import UpdatePersonalInfoModal from "./UpdatePersonalInfoModal";
 
 export default function AdminHeader({
   user,
   setUser,
+  getUser,
   activePage,
   handleActivePage,
+  accessToken,
   setAccessToken,
 }) {
   const cookies = new Cookies({ path: "/" });
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const [selectedOfficer, setSelectedOfficer] = useState({
+    email: "",
+    first_name: "",
+    id: "",
+    last_name: "",
+    ranks: "",
+    phone_number: "",
+    role: "",
+    birth_date: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    setSelectedOfficer(user);
+  }, [user]);
+
+  const handleModal = (action) => {
+    setModalOpen(action);
+  };
+
   return (
     <header className="w-full">
+      {isModalOpen && (
+        <UpdatePersonalInfoModal
+          selectedOfficer={selectedOfficer}
+          setSelectedOfficer={setSelectedOfficer}
+          handleModal={handleModal}
+          accessToken={accessToken}
+          getUser={getUser}
+        />
+      )}
       <div className="w-full relative">
         <img
           src={logo}
@@ -31,7 +65,9 @@ export default function AdminHeader({
         </div>
 
         {user.id ? (
-          <div className="flex gap-2 items-center">
+          <button
+            className="flex gap-2 items-center"
+            onClick={() => handleModal(true)}>
             <p className="text-slate-300 p-3">
               {user.last_name + ", " + user.first_name}
             </p>
@@ -44,7 +80,7 @@ export default function AdminHeader({
               }}>
               SIGN OUT
             </button>
-          </div>
+          </button>
         ) : (
           <div className="flex gap-2 items-center text-xs font-semibold">
             <Link

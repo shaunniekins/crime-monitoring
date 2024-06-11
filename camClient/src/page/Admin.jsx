@@ -132,25 +132,26 @@ export default function Admin() {
   });
 
   // SET USER / LOGGED IN
+  // return console.log(decoded.data.id)
+  const getUser = async () => {
+    if (cookies.get("user")) {
+      const token = cookies.get("user");
+      const decoded = jwt_decode(token.data);
+      await axios
+        .get(`/user/?id=${decoded.id}`, {
+          headers: {
+            Authorization: `Bearer ${token.data}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.data[0].role === "user") return navigate("/");
+          setUser(res.data.data[0]);
+        });
+      setAccessToken(token.data);
+    }
+  };
+
   useEffect(() => {
-    // return console.log(decoded.data.id)
-    const getUser = async () => {
-      if (cookies.get("user")) {
-        const token = cookies.get("user");
-        const decoded = jwt_decode(token.data);
-        await axios
-          .get(`/user/?id=${decoded.id}`, {
-            headers: {
-              Authorization: `Bearer ${token.data}`,
-            },
-          })
-          .then((res) => {
-            if (res.data.data[0].role === "user") return navigate("/");
-            setUser(res.data.data[0]);
-          });
-        setAccessToken(token.data);
-      }
-    };
     getUser();
     getReportedCrime();
   }, []);
@@ -165,8 +166,10 @@ export default function Admin() {
       <AdminHeader
         user={user}
         setUser={setUser}
+        getUser={getUser}
         activePage={activePage}
         handleActivePage={handleActivePage}
+        accessToken={accessToken}
         setAccessToken={setAccessToken}
       />
       <div className="flex">
