@@ -5,13 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MissingTable from "./MissingTable";
 import { clientUrl } from "../../urlConfig";
-import {
-  genderOpt,
-  typeOpt,
-  eyeColorOpt,
-  hairColorOpt,
-  hairStyleOpt,
-} from "../options";
+import { genderOpt, eyeColorOpt, hairColorOpt, hairStyleOpt } from "../options";
 
 export default function ReportMissing({
   user,

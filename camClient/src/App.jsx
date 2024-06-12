@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Cookies from "universal-cookie";
 import "./App.css";
 import jwt_decode from "jwt-decode";

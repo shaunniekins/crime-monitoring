@@ -6,7 +6,7 @@ import io from "socket.io-client";
 import { Tabs, Tab, Input, Button } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import { serverUrl } from "../../../urlConfig";
-import { barangayOpt, monthOpt, offenseOpt } from "../../options";
+import { barangayOpt, monthOpt } from "../../options";
 import Select from "react-select";
 import { useReactToPrint } from "react-to-print";
 

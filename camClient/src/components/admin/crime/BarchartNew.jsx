@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import CustomTooltip, { CustomTooltip2 } from "./CustomTooltip";
+import { CustomTooltip2 } from "./CustomTooltip";
 
 import { Select as NextSelect, SelectItem } from "@nextui-org/react";
 

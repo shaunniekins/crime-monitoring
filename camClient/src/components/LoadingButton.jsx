@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import SVGSpin from "../assets/spinner.svg";
+import React from "react";
 
 const LoadingButton = ({ onClick, isLoading, text, size }) => {
   return (

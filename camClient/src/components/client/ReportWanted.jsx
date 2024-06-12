@@ -1,26 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
-import {
-  regions,
-  provinces,
-  cities,
-  barangays,
-  regionByCode,
-  provincesByCode,
-  provinceByName,
-} from "select-philippines-address";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import WantedTable from "./WantedTable";
 import { clientUrl } from "../../urlConfig";
-import {
-  genderOpt,
-  typeOpt,
-  eyeColorOpt,
-  hairColorOpt,
-  hairStyleOpt,
-} from "../options";
+import { genderOpt, eyeColorOpt, hairColorOpt, hairStyleOpt } from "../options";
 
 export default function ReportWanted({
   user,

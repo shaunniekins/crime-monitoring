@@ -1,6 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import io from "socket.io-client";
@@ -38,17 +37,6 @@ export default function UpdatePersonalInfoModal({
       autoClose: 2000,
     });
   };
-
-  //OPTION FOR SELECT
-  const activateOpt = [
-    { value: 1, label: "True" },
-    { value: 0, label: "False" },
-  ];
-
-  const roleOpt = [
-    { value: "admin", label: "admin" },
-    { value: "user", label: "user" },
-  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();

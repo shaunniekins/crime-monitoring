@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import {
-  regions,
-  provinces,
-  cities,
-  barangays,
-  regionByCode,
-  provincesByCode,
-  provinceByName,
-} from "select-philippines-address";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

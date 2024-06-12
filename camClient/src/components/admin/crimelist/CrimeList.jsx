@@ -11,7 +11,6 @@ export default function CrimeList({ reportedCrime, handleValidated, setQ }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [search, setSearch] = useState("");
 
   const [loading, setLoading] = useState(false);
   const handleFilter = () => {
