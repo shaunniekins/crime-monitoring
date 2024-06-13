@@ -49,6 +49,7 @@ function DisplayWanted() {
 
   useEffect(() => {
     setCurrentPage(1);
+    console.log("filter", filter);
   }, [filter, searchValue]);
 
   return (
@@ -83,7 +84,7 @@ function DisplayWanted() {
               />
             </Tabs>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-7">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-7 w-full">
             {personList.map((person) => (
               <Tooltip
                 key={person.id}
@@ -123,6 +124,7 @@ function DisplayWanted() {
                     <div className="text-small">
                       {person.last_known_address}
                     </div>
+                    <div className="text-small">{person.type}</div>
                     <div className="text-small">
                       {person.weight && `${person.weight} kg`}
                       {person.weight && person.height && " | "}
