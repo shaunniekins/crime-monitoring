@@ -481,3 +481,15 @@ export const indexCrimes = [
   "theft",
   "carnapping",
 ];
+
+export const barangayColors = {
+  Consuelo: "bg-gray-600",
+  "Bunawan Brook": "bg-yellow-400",
+  "San Teodoro": "bg-pink-300",
+  Libertad: "bg-green-500",
+  "San Andres": "bg-orange-400",
+  Imelda: "bg-purple-600",
+  Poblacion: "bg-fuchsia-500",
+  Mambalili: "bg-teal-600",
+  "Nueva Era": "bg-cyan-300",
+};

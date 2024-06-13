@@ -55,11 +55,12 @@ function DisplayWanted() {
     <div>
       {personList ? (
         <div className="flex flex-col justify-center items-center gap-10">
-          <div className="w-full flex justify-between items-center">
-            <h1 className="text-2xl font-semibold">{filter}</h1>
+          <div className="w-full flex flex-col md:flex-row justify-between items-center">
+            <h1 className="text-xl md:text-2xl font-semibold mb-3 md:mb-0">
+              {filter}
+            </h1>
             <Tabs
               key="lg"
-              size="lg"
               aria-label="person-of-concern-select"
               onSelectionChange={setFilter}>
               <Tab
@@ -70,7 +71,6 @@ function DisplayWanted() {
                     <span>WANTED PERSON</span>
                   </div>
                 }
-                // title="WANTED PERSON"
               />
               <Tab
                 key="MISSING PERSON"
@@ -80,11 +80,10 @@ function DisplayWanted() {
                     <span>MISSING PERSON</span>
                   </div>
                 }
-                // title="MISSING PERSON"
               />
             </Tabs>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-7">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-7">
             {personList.map((person) => (
               <Tooltip
                 key={person.id}
@@ -102,7 +101,7 @@ function DisplayWanted() {
                         : `${clientUrl}/default.jpg`
                     }
                     alt={person.first_name}
-                    className="w-full h-fit object-cover mb-2"
+                    className="w-full h-36 object-contain bg-gray-200 md:mb-2"
                   />
                   <div className="py-2 font-normal">
                     <h1 className="font-semibold">
@@ -129,7 +128,7 @@ function DisplayWanted() {
                       {person.weight && person.height && " | "}
                       {person.height && `${person.height} cm`}
                     </div>
-                    <div className="text-small font-semibold font-serif text-gray-500 my-3">
+                    <div className="text-small font-semibold font-serif text-gray-500 mt-2 md:my-3">
                       {person.status}
                     </div>
                   </div>
@@ -137,7 +136,6 @@ function DisplayWanted() {
               </Tooltip>
             ))}
           </div>
-          {/* {totalPages > 0 ? ( */}
           <Pagination
             isCompact
             showControls
@@ -147,7 +145,6 @@ function DisplayWanted() {
             total={totalPages}
             onChange={(page) => setCurrentPage(page)}
           />
-          {/* ) : null} */}
         </div>
       ) : null}
     </div>

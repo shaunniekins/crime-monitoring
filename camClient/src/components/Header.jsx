@@ -19,9 +19,13 @@ export default function Header({
         <img
           src={logo}
           alt="Design"
-          className="absolute top-8 left-10 w-64 rounded-lg shadow-lg"
+          className="absolute w-28 top-2 left-1/2 transform -translate-x-1/2 md:w-44 md:top-8 md:left-10 md:translate-x-0 rounded-lg shadow-lg"
         />
-        <img src={headDesign} alt="Design" className="w-full" />
+        <img
+          src={headDesign}
+          alt="Design"
+          className="w-full h-32 md:h-60 object-cover"
+        />
         <div className="w-full absolute bottom-0 bg-neutral-700 h-10 opacity-30"></div>
       </div>
       <nav className="flex justify-between items-center text-white p-2 sm:p-5 gap-2 bg-neutral-900">
@@ -63,7 +67,7 @@ export default function Header({
           </div>
         )}
       </nav>
-      <div className="flex justify-center gap-5 pt-2 bg-neutral-800 text-yellow-500 text-md font-bold">
+      <div className="flex flex-col md:flex-row justify-center md:gap-5 bg-neutral-800 text-yellow-500 text-sm md:text-medium font-bold">
         <button
           className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
             activePage === "crime" ? "text-yellow-600 bg-slate-200" : ""
