@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import headDesign from "../../assets/header.jpg";
 import logo from "../../assets/logo.png";
 import UpdatePersonalInfoModal from "./UpdatePersonalInfoModal";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 export default function AdminHeader({
   user,
@@ -15,7 +16,6 @@ export default function AdminHeader({
   setAccessToken,
 }) {
   const cookies = new Cookies({ path: "/" });
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const [selectedOfficer, setSelectedOfficer] = useState({
     email: "",
@@ -33,28 +33,31 @@ export default function AdminHeader({
     setSelectedOfficer(user);
   }, [user]);
 
-  const handleModal = (action) => {
-    setModalOpen(action);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <header className="w-full">
-      {isModalOpen && (
-        <UpdatePersonalInfoModal
-          selectedOfficer={selectedOfficer}
-          setSelectedOfficer={setSelectedOfficer}
-          handleModal={handleModal}
-          accessToken={accessToken}
-          getUser={getUser}
-        />
-      )}
+      <UpdatePersonalInfoModal
+        selectedOfficer={selectedOfficer}
+        setSelectedOfficer={setSelectedOfficer}
+        accessToken={accessToken}
+        getUser={getUser}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      />
+
       <div className="w-full relative">
         <img
           src={logo}
           alt="Design"
-          className="absolute top-8 left-10 w-64 rounded-lg shadow-lg"
+          className="absolute w-28 top-2 left-1/2 transform -translate-x-1/2 md:w-44 md:top-8 md:left-10 md:translate-x-0 rounded-lg shadow-lg"
         />
-        <img src={headDesign} alt="Design" className="w-full" />
+        <img
+          src={headDesign}
+          alt="Design"
+          className="w-full h-32 md:h-60 object-cover"
+        />
         <div className="w-full absolute bottom-0 bg-neutral-700 h-10 opacity-30"></div>
       </div>
       <nav className="flex justify-between items-center text-white p-2 sm:p-5 gap-2 bg-neutral-900">
@@ -65,12 +68,10 @@ export default function AdminHeader({
         </div>
 
         {user.id ? (
-          <button
-            className="flex gap-2 items-center"
-            onClick={() => handleModal(true)}>
-            <p className="text-slate-300 p-3">
+          <div className="flex gap-2 items-center">
+            <Button onPress={onOpen} variant="light" className="text-slate-300">
               {user.last_name + ", " + user.first_name}
-            </p>
+            </Button>
             <button
               className="text-xs font-semibold p-3 bg-yellow-600 border-b-4 border-b-yellow-800 hover:bg-yellow-700 hover:border-b-yellow-900 hover:shadow-lg rounded-md text-white duration-200"
               onClick={() => {
@@ -80,7 +81,7 @@ export default function AdminHeader({
               }}>
               SIGN OUT
             </button>
-          </button>
+          </div>
         ) : (
           <div className="flex gap-2 items-center text-xs font-semibold">
             <Link
@@ -96,32 +97,6 @@ export default function AdminHeader({
           </div>
         )}
       </nav>
-      {/* <div className="flex justify-center gap-5 pt-2 bg-neutral-800 text-yellow-500 text-md font-bold">
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "report tracker" ? "text-yellow-600 bg-slate-200" : ""
-          }`}
-          onClick={() => handleActivePage("report tracker")}
-        >
-          REPORT TRACKER
-        </button>
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "person of concern" ? "text-yellow-600 bg-slate-200" : ""
-          }`}
-          onClick={() => handleActivePage("person of concern")}
-        >
-          PERSON OF CONCERN
-        </button>
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "officer" ? "text-yellow-600 bg-slate-200" : ""
-          }`}
-          onClick={() => handleActivePage("officer")}
-        >
-          OFFICER
-        </button>
-      </div> */}
     </header>
   );
 }

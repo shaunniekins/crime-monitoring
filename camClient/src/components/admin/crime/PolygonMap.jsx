@@ -10,6 +10,7 @@ const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
       zoomControl: false,
       fullscreenControl: false,
       streetViewControl: false,
+      mapTypeControl: false,
       // mapTypeControlOptions: {
       //   position: window.google.maps.ControlPosition.TOP_RIGHT,
       // },
@@ -2285,7 +2286,7 @@ const PolygonMap = ({ crimes, barangay, index, nonIndex }) => {
     });
   }, [crimes]);
 
-  return <div id="map" style={{ width: "100%", height: "800px" }}></div>;
+  return <div id="map" className="w-[100%] h-[35rem] md:h-[800px]"></div>;
 };
 
 export default PolygonMap;

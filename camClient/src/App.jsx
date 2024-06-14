@@ -19,6 +19,7 @@ import DisplayWanted from "./components/DisplayWanted";
 import { serverUrl } from "./urlConfig";
 import { Card, CardBody, Tab, Tabs } from "@nextui-org/react";
 import { barangayColors, indexCrimes, offenseOpt1 } from "./components/options";
+import { FiMenu } from "react-icons/fi";
 
 const socket = io.connect(serverUrl);
 
@@ -108,24 +109,25 @@ function App() {
 
   // SET USER / LOGGED IN
 
+  const getUser = async () => {
+    if (cookies.get("user")) {
+      const token = cookies.get("user");
+      const decoded = jwt_decode(token.data);
+      await axios
+        .get(`/user/?id=${decoded.id}`, {
+          headers: {
+            Authorization: `Bearer ${token.data}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.data[0].role === "admin") return navigate("/admin");
+          setUser(res.data.data[0]);
+        });
+      setAccessToken(token.data);
+    }
+  };
+
   useEffect(() => {
-    const getUser = async () => {
-      if (cookies.get("user")) {
-        const token = cookies.get("user");
-        const decoded = jwt_decode(token.data);
-        await axios
-          .get(`/user/?id=${decoded.id}`, {
-            headers: {
-              Authorization: `Bearer ${token.data}`,
-            },
-          })
-          .then((res) => {
-            if (res.data.data[0].role === "admin") return navigate("/admin");
-            setUser(res.data.data[0]);
-          });
-        setAccessToken(token.data);
-      }
-    };
     getUser();
     getCrimes();
     getTotalCasesPerBrgy();
@@ -293,12 +295,15 @@ function App() {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <main className="flex flex-col min-h-screen max-w-screen bg-slate-200 overflow-x-hidden overflow-hidden">
       <Header
         user={user}
         handleActivePage={handleActivePage}
         setUser={setUser}
+        getUser={getUser}
         setAccessToken={setAccessToken}
         accessToken={accessToken}
       />
@@ -312,7 +317,7 @@ function App() {
           </div>
         </>
       ) : (
-        <section className="flex flex-col p-5">
+        <section className="mx-3 md:container md:mx-auto my-2 flex flex-col">
           {activePage === "wanted" ? (
             <ReportWanted
               user={user}
@@ -348,18 +353,25 @@ function App() {
               <div className="w-full">
                 <Tabs aria-label="Options">
                   <Tab key="crime" title="Crime">
-                    <Card>
-                      <CardBody>
-                        <div className="flex relative">
-                          <div className="w-full">
-                            {updatedData && (
-                              <PolygonMap
-                                crimes={filteredData}
-                                barangay={selectedBarangay}
-                              />
-                            )}
-                          </div>
-                          <div className="w-56 py-3 px-2 absolute top-0 right-0 text-sm flex-flex-col bg-black">
+                    <div className="w-full md:p-3 md:container md:mx-auto h-full bg-gray-100 shadow-md rounded-lg text-center text-slate-500 font-bold">
+                      <div className="flex relative">
+                        <div className="w-full">
+                          {updatedData && (
+                            <PolygonMap
+                              crimes={filteredData}
+                              barangay={selectedBarangay}
+                            />
+                          )}
+                        </div>
+                        <div className="absolute top-0 right-0 flex flex-col justify-end items-end">
+                          <FiMenu
+                            className="block md:hidden text-2xl cursor-pointer mr-2 my-2"
+                            onClick={() => setIsOpen(!isOpen)}
+                          />
+                          <div
+                            className={`w-56 py-3 px-2 text-sm flex-flex-col bg-black ${
+                              isOpen ? "block" : "hidden"
+                            } md:block`}>
                             <select
                               name="filter-barangay"
                               id="filter-barangay"
@@ -541,17 +553,13 @@ function App() {
                               )}
                           </div>
                         </div>
-                      </CardBody>
-                    </Card>
+                      </div>
+                    </div>
                   </Tab>
                   <Tab key="person-of-concern" title="Person of Concern">
-                    <Card>
-                      <CardBody>
-                        <div className="container mx-auto w-full h-full bg-gray-100 shadow-md p-3 m-2 rounded-lg text-center text-slate-500 font-bold">
-                          <DisplayWanted />
-                        </div>
-                      </CardBody>
-                    </Card>
+                    <div className="w-full p-3 md:container md:mx-auto h-full bg-gray-100 shadow-md rounded-lg text-center text-slate-500 font-bold">
+                      <DisplayWanted />
+                    </div>
                   </Tab>
                 </Tabs>
               </div>

@@ -493,3 +493,65 @@ export const barangayColors = {
   Mambalili: "bg-teal-600",
   "Nueva Era": "bg-cyan-300",
 };
+
+export const placeOpt = [
+  { label: "Residential (house/condo)", value: "Residential (house/condo)" },
+  {
+    label: "Construction/Industrial Barracks",
+    value: "Construction/Industrial Barracks",
+  },
+  {
+    label: "Onboard a vehicle (riding in/on)",
+    value: "Onboard a vehicle (riding in/on)",
+  },
+  { label: "Along the street", value: "Along the street" },
+  { label: "Farm/Ricefield", value: "Farm/Ricefield" },
+  {
+    label: "Commercial/Business Establishment",
+    value: "Commercial/Business Establishment",
+  },
+  { label: "River/Lake", value: "River/Lake" },
+  {
+    label: "Vacant Lot (unused/unoccupied open area)",
+    value: "Vacant Lot (unused/unoccupied open area)",
+  },
+  {
+    label: "Recreational Place (resorts/parks)",
+    value: "Recreational Place (resorts/parks)",
+  },
+  {
+    label: "Government Office/Establishment",
+    value: "Government Office/Establishment",
+  },
+  {
+    label: "School (Grade/High School/College/University)",
+    value: "School (Grade/High School/College/University)",
+  },
+  { label: "Hospital (Gov't/Private)", value: "Hospital (Gov't/Private)" },
+  {
+    label: "Religious Place (church/mosque)",
+    value: "Religious Place (church/mosque)",
+  },
+  {
+    label: "Abandoned Structure (house, bldg, apartment/cond)",
+    value: "Abandoned Structure (house, bldg, apartment/cond)",
+  },
+  {
+    label: "Parking Area (vacant lot, in bldg/structure, open parking)",
+    value: "Parking Area (vacant lot, in bldg/structure, open parking)",
+  },
+  { label: "Forest (Gubat)", value: "Forest (Gubat)" },
+];
+
+
+export const felonyOpt = [
+  { label: "CONSUMMATED", value: "CONSUMMATED" },
+  { label: "ATTEMPTED", value: "ATTEMPTED" },
+  { label: "FRUSTRATED", value: "FRUSTRATED" },
+];
+
+export const statusOpt = [
+  { label: "Solved", value: "Solved" },
+  { label: "Cleared", value: "Cleared" },
+  { label: "Under Investigation", value: "Under Investigation" },
+];

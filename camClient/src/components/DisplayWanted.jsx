@@ -47,11 +47,6 @@ function DisplayWanted() {
     getPerson();
   });
 
-  useEffect(() => {
-    setCurrentPage(1);
-    console.log("filter", filter);
-  }, [filter, searchValue]);
-
   return (
     <div>
       {personList ? (

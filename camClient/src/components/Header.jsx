@@ -1,20 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
 import headDesign from "../assets/header.jpg";
 import logo from "../assets/logo.png";
+import UpdatePersonalInfoModal from "./admin/UpdatePersonalInfoModal";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 export default function Header({
   user,
   setUser,
+  getUser,
   activePage,
   handleActivePage,
   setAccessToken,
   accessToken,
 }) {
   const cookies = new Cookies({ path: "/" });
+
+  const [selectedOfficer, setSelectedOfficer] = useState({
+    email: "",
+    first_name: "",
+    id: "",
+    last_name: "",
+    ranks: "",
+    phone_number: "",
+    role: "",
+    birth_date: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    setSelectedOfficer(user);
+  }, [user]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <header className="w-full">
+      <UpdatePersonalInfoModal
+        selectedOfficer={selectedOfficer}
+        accessToken={accessToken}
+        getUser={getUser}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      />
       <div className="w-full relative">
         <img
           src={logo}
@@ -39,11 +69,11 @@ export default function Header({
 
         {user.id ? (
           <div className="flex gap-2 items-center">
-            <p className="text-slate-300 p-3">
+            <Button onPress={onOpen} variant="light" className="text-slate-300">
               {user.last_name + ", " + user.first_name}
-            </p>
+            </Button>
             <button
-              className="text-xs font-semibold p-3 bg-yellow-600 border-b-4 border-b-yellow-800 hover:bg-yellow-700 hover:border-b-yellow-900 hover:shadow-lg rounded-md text-white duration-200"
+              className="text-xs font-semibold p-3 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg rounded-md text-white duration-200"
               onClick={() => {
                 cookies.remove("user");
                 setUser({});
@@ -67,30 +97,32 @@ export default function Header({
           </div>
         )}
       </nav>
-      <div className="flex flex-col md:flex-row justify-center md:gap-5 bg-neutral-800 text-yellow-500 text-sm md:text-medium font-bold">
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "crime" ? "text-yellow-600 bg-slate-200" : ""
-          }
+      {user.id && (
+        <div className="flex flex-col md:flex-row justify-center md:gap-5 bg-neutral-800 text-yellow-500 text-sm md:text-medium font-bold">
+          <button
+            className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
+              activePage === "crime" ? "text-yellow-600 bg-slate-200" : ""
+            }
           `}
-          onClick={() => handleActivePage("crime")}>
-          REPORT CRIME
-        </button>
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "wanted" ? "text-yellow-600 bg-slate-200" : ""
-          }`}
-          onClick={() => handleActivePage("wanted")}>
-          REPORT WANTED PERSON
-        </button>
-        <button
-          className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
-            activePage === "missing" ? "text-yellow-600 bg-slate-200" : ""
-          }`}
-          onClick={() => handleActivePage("missing")}>
-          REPORT MISSING PERSON
-        </button>
-      </div>
+            onClick={() => handleActivePage("crime")}>
+            REPORT CRIME
+          </button>
+          <button
+            className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
+              activePage === "wanted" ? "text-yellow-600 bg-slate-200" : ""
+            }`}
+            onClick={() => handleActivePage("wanted")}>
+            REPORT WANTED PERSON
+          </button>
+          <button
+            className={`hover:text-yellow-600 duration-200 p-2 rounded-t-sm ${
+              activePage === "missing" ? "text-yellow-600 bg-slate-200" : ""
+            }`}
+            onClick={() => handleActivePage("missing")}>
+            REPORT MISSING PERSON
+          </button>
+        </div>
+      )}
     </header>
   );
 }
