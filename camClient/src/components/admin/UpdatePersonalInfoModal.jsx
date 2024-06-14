@@ -121,7 +121,7 @@ export default function UpdatePersonalInfoModal({
               </ModalHeader>
               <Divider />
 
-              <ModalBody className="h-full flex flex-col gap-3 overflow-y-auto">
+              <ModalBody className="w-full h-full flex flex-col gap-3 overflow-y-auto">
                 <div className="flex flex-col">
                   <label>Email</label>
                   <input
@@ -169,11 +169,11 @@ export default function UpdatePersonalInfoModal({
                     />
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full">
                   <label>Birth Date</label>
                   <input
                     type="date"
-                    className="border border-neutral-300 p-2 rounded-md"
+                    className="w-full border border-neutral-300 p-2 rounded-md"
                     value={credentials.birth_date}
                     onChange={(e) =>
                       setCredentials({

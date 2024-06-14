@@ -175,7 +175,7 @@ export default function ReportCrime({
           </h1>
         </CardHeader>
         <Divider />
-        <CardBody className="flex flex-col gap-3">
+        <CardBody className="w-full flex flex-col gap-3">
           <div className="flex flex-col">
             <label htmlFor="">Offense</label>
             <Select
@@ -244,12 +244,12 @@ export default function ReportCrime({
               }
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="flex flex-col">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="w-full flex flex-col">
               <label htmlFor="">Date Reported</label>
               <input
                 type="date"
-                className="border border-neutral-300 p-2 rounded-md"
+                className="w-full border border-neutral-300 p-2 rounded-md"
                 value={details.date_reported}
                 onChange={(e) =>
                   setDetails({ ...details, date_reported: e.target.value })
@@ -257,11 +257,11 @@ export default function ReportCrime({
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="w-full flex flex-col">
               <label htmlFor="">Time Reported</label>
               <input
                 type="time"
-                className="border border-neutral-300 p-2 rounded-md"
+                className="w-full border border-neutral-300 p-2 rounded-md"
                 value={details.time_reported}
                 onChange={(e) =>
                   setDetails({ ...details, time_reported: e.target.value })
@@ -269,11 +269,11 @@ export default function ReportCrime({
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="w-full flex flex-col">
               <label htmlFor="">Date Committed</label>
               <input
                 type="date"
-                className="border border-neutral-300 p-2 rounded-md"
+                className="w-full border border-neutral-300 p-2 rounded-md"
                 value={details.date_committed}
                 onChange={(e) =>
                   setDetails({ ...details, date_committed: e.target.value })
@@ -281,11 +281,11 @@ export default function ReportCrime({
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="w-full flex flex-col">
               <label htmlFor="">Time Committed</label>
               <input
                 type="time"
-                className="border border-neutral-300 p-2 rounded-md"
+                className="w-full border border-neutral-300 p-2 rounded-md"
                 value={details.time_committed}
                 onChange={(e) =>
                   setDetails({ ...details, time_committed: e.target.value })
