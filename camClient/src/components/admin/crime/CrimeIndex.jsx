@@ -194,9 +194,29 @@ export default function CrimeIndex({ accessToken }) {
     <div className="w-full h-full p-2 sm:p-5 shadow-lg rounded-sm bg-white">
       <div className="flex flex-col">
         <div className="flex flex-col">
-          <div className="flex justify-between items-center">
-            <p className="font-bold text-2xl">CRIME TYPE</p>
-            <div className="flex justify-center items-center gap-3">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="w-full flex justify-between mb-3 md:mb-0">
+              <p className="font-bold text-2xl">CRIME TYPE</p>
+              <Button
+                className="flex md:hidden"
+                variant="light"
+                startContent={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-printer-fill"
+                    viewBox="0 0 16 16">
+                    <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                    <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                  </svg>
+                }
+                onClick={handlePrint}>
+                Print
+              </Button>
+            </div>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-3 mb-3 md:mb-0">
               <Tabs
                 key="lg"
                 size="lg"
@@ -206,6 +226,7 @@ export default function CrimeIndex({ accessToken }) {
                 <Tab key="false" title="Non-Index Crimes" />
               </Tabs>
               <Button
+                className="hidden md:flex"
                 variant="light"
                 startContent={
                   <svg
@@ -226,7 +247,7 @@ export default function CrimeIndex({ accessToken }) {
           </div>
 
           <div className="mt-2">
-            <div className="flex gap-2 justify-end items-center w-full">
+            <div className="grid grid-cols-1 md:flex gap-2 justify-end items-center w-full">
               <NextSelect
                 label="Barangay"
                 aria-label="Select Barangay"

@@ -319,7 +319,7 @@ export default function ReportWanted({
         <p className="font-bold">Reported Wanted History</p>
         <Button onPress={onOpen} variant="light">
           {" "}
-          View all
+          View All
         </Button>
         {wantedHistory &&
           wantedHistory.map((data, index) => (

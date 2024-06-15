@@ -322,7 +322,7 @@ export default function ReportMissing({
         <p className="font-bold">Reported Missing History</p>
         <Button onPress={onOpen} variant="light">
           {" "}
-          View all
+          View All
         </Button>
 
         {missingHistory &&

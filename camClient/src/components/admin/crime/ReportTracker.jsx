@@ -86,15 +86,15 @@ export default function ReportTracker({
 
   return (
     <div className="flex flex-col w-full h-full gap-3 p-2 sm:p-5 rounded-smoverflow-auto">
-      <div className="flex gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* per brgy */}
-        <div className="w-4/12 max-h-56 z-50 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
+        <div className="w-full max-h-56 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
           <div className="text-center w-full">
             <DataPerBarangay totalCasesPerBrgy={totalCasesPerBrgy} />
           </div>
         </div>
         {/* per year */}
-        <div className="w-4/12 max-h-56 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
+        <div className="w-full max-h-56 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
           <div className="text-center w-full">
             <p className="text-start p-2 font-bold text-slate-500">
               Total Cases Per Year
@@ -112,7 +112,7 @@ export default function ReportTracker({
           </div>
         </div>
         {/* Case Status */}
-        <div className="w-4/12 max-h-56 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
+        <div className="w-full max-h-56 bg-white shadow-md rounded-md p-3 overflow-y-scroll">
           <div className="text-center w-full">
             <p className="text-start p-2 font-bold text-slate-500">
               Over All Case Status

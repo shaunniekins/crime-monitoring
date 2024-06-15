@@ -77,9 +77,9 @@ export default function Officer({ accessToken, user }) {
         />
       )}
       <div className="flex flex-col gap-5">
-        <div className="flex justify-between items-center">
-          <p className="font-bold text-2xl">USER LIST</p>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <p className="font-bold text-2xl mb-3 md:mb-0">USER LIST</p>
+          <div className="flex items-center gap-2 w-full md:w-auto">
             <Input
               isClearable
               onClear={() => setKeywords("")}
@@ -104,7 +104,7 @@ export default function Officer({ accessToken, user }) {
                   "!cursor-text",
                 ],
               }}
-              placeholder="Type to search..."
+              placeholder="Search..."
               value={keywords}
               onChange={(e) => {
                 // setCurrentPage(1);

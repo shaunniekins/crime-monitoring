@@ -9,12 +9,12 @@ import Officer from "../components/admin/officer/Officer";
 import PersonOfConcern from "../components/admin/wanted/PersonOfConcern";
 import Sidebar from "../components/admin/Sidebar";
 import Upload from "../components/admin/upload/Upload";
-import ListCrimes from "../components/admin/ListCrimes";
 import CrimeList from "../components/admin/crimelist/CrimeList";
 import io from "socket.io-client";
 import Crimes from "../components/admin/crime/Crimes";
 import CrimeIndex from "../components/admin/crime/CrimeIndex";
 import FirstPage from "../components/admin/crime/FirstPage";
+import { FiMenu } from "react-icons/fi";
 import { serverUrl } from "../urlConfig";
 const socket = io.connect(serverUrl);
 
@@ -132,7 +132,6 @@ export default function Admin() {
   });
 
   // SET USER / LOGGED IN
-  // return console.log(decoded.data.id)
   const getUser = async () => {
     if (cookies.get("user")) {
       const token = cookies.get("user");
@@ -160,31 +159,53 @@ export default function Admin() {
     getReportedCrime();
   }, [validated, q]);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [activePage]);
+
   return (
     <main
-      className={`flex absolute flex-col w-screen bg-slate-200 max-h-screen overflow-x-hidden overflow-y-auto`}>
+      className={`${
+        isSidebarOpen ? "max-h-[100svh] " : "min-h-[100svh]"
+      } md:min-h-[100svh] flex flex-col max-w-screen bg-slate-200 overflow-hidden`}>
       <AdminHeader
         user={user}
         setUser={setUser}
         getUser={getUser}
         activePage={activePage}
-        handleActivePage={handleActivePage}
         accessToken={accessToken}
         setAccessToken={setAccessToken}
       />
-      <div className="flex">
-        <Sidebar
-          user={user}
-          handleActivePage={handleActivePage}
-          activePage={activePage}
-        />
-        {!accessToken ? (
-          <p className="bg-red-200 shadow-md p-2 m-2 w-full rounded-lg text-center text-slate-500 font-bold">
-            Please login to access this page.
-          </p>
-        ) : (
-          <div className="flex gap-2 w-full p-5">
-            <div className="flex w-5/6">
+      <FiMenu
+        className="block md:hidden text-2xl cursor-pointer mx-3 mt-3"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+      <div className="flex w-full h-full">
+        <div
+          className={`${
+            isSidebarOpen
+              ? "block absolute top-0 left-0 z-50 w-full overflow-hidden"
+              : "hidden"
+          } md:flex`}>
+          <Sidebar
+            user={user}
+            handleActivePage={handleActivePage}
+            activePage={activePage}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </div>
+        <div className="w-full h-full">
+          {!accessToken ? (
+            <p className="mx-3 md:container md:mx-auto bg-red-200 shadow-md p-2 my-2 rounded-lg text-center text-slate-500 font-bold">
+              Please login to access this page.
+            </p>
+          ) : (
+            <div
+              className={`${
+                isSidebarOpen ? "overflow-hidden" : ""
+              } flex w-full h-full p-3`}>
               {activePage === "Overview" ? (
                 <ReportTracker
                   showTooltip={showTooltip}
@@ -208,6 +229,7 @@ export default function Admin() {
                 <CrimeList
                   reportedCrime={reportedCrime}
                   handleValidated={handleValidated}
+                  handleActivePage={handleActivePage}
                   setQ={setQ}
                 />
               ) : (
@@ -220,29 +242,16 @@ export default function Admin() {
                   totalCasesPerYear={totalCasesPerYear}
                   crimes={crimes}
                   accessToken={accessToken}
+                  activePage={activePage}
+                  reportedCrime={reportedCrime}
+                  handleActivePage={handleActivePage}
+                  isSidebarOpen={isSidebarOpen}
+                  setIsSidebarOpen={setIsSidebarOpen}
                 />
               )}
             </div>
-            <div
-              className={`flex w-1/6 bg-white min-h-80 max-h-96 flex-wrap shadow-lg overflow-scroll rounded-sm ${
-                activePage === "Crime List" ? "hidden" : ""
-              }`}>
-              <div className="sticky top-0 bg-white w-full p-2 shadow-sm text-slate-500 font-bold">
-                Reported Crimes (Not Validated)
-              </div>
-              <div className="w-full px-2">
-                <p
-                  className="cursor-pointer hover:underline"
-                  onClick={(e) => handleActivePage("Crime List")}>
-                  View All
-                </p>
-              </div>
-              <div className="p-2 text-xs">
-                {<ListCrimes reportedCrime={reportedCrime} />}
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </main>
   );

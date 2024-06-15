@@ -149,11 +149,11 @@ export default function PersonOfConcern({ accessToken }) {
         />
       )}
       <div className="flex flex-col gap-5">
-        <div className="flex justify-between items-center">
-          <p className="font-bold text-2xl">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <p className="font-bold text-2xl mb-3 md:mb-0">
             {filter === "WANTED PERSON" ? "WANTED PERSON" : "MISSING PERSON"}
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-row items-center gap-2">
             <Tabs
               key="lg"
               size="lg"
@@ -162,69 +162,71 @@ export default function PersonOfConcern({ accessToken }) {
               <Tab key="WANTED PERSON" title="WANTED PERSON" />
               <Tab key="MISSING PERSON" title="MISSING PERSON" />
             </Tabs>
-            <Input
-              isClearable
-              onClear={() => setKeywords("")}
-              radius="lg"
-              classNames={{
-                label: "text-black/50 dark:text-white/90",
-                input: [
-                  "bg-transparent",
-                  "text-black/90 dark:text-white/90",
-                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-                ],
-                innerWrapper: "bg-transparent",
-                inputWrapper: [
-                  "bg-default-200/50",
-                  "dark:bg-default/60",
-                  "backdrop-blur-xl",
-                  "backdrop-saturate-200",
-                  "hover:bg-default-200/70",
-                  "dark:hover:bg-default/70",
-                  "group-data-[focused=true]:bg-default-200/50",
-                  "dark:group-data-[focused=true]:bg-default/60",
-                  "!cursor-text",
-                ],
-              }}
-              placeholder="Type to search..."
-              value={keywords}
-              onChange={(e) => {
-                // setCurrentPage(1);
-                setKeywords(e.target.value);
-              }}
-              startContent={
-                <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-              }
-            />
-            <Button
-              color="success"
-              variant="ghost"
-              onClick={() => handleModal(true)}>
-              ADD
-            </Button>
-            <div>
-              <Button
-                variant="light"
+            <div className="flex gap-2">
+              <Input
+                isClearable
+                onClear={() => setKeywords("")}
+                radius="lg"
+                classNames={{
+                  label: "text-black/50 dark:text-white/90",
+                  input: [
+                    "bg-transparent",
+                    "text-black/90 dark:text-white/90",
+                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                  ],
+                  innerWrapper: "bg-transparent",
+                  inputWrapper: [
+                    "bg-default-200/50",
+                    "dark:bg-default/60",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "dark:hover:bg-default/70",
+                    "group-data-[focused=true]:bg-default-200/50",
+                    "dark:group-data-[focused=true]:bg-default/60",
+                    "!cursor-text",
+                  ],
+                }}
+                placeholder="Search..."
+                value={keywords}
+                onChange={(e) => {
+                  // setCurrentPage(1);
+                  setKeywords(e.target.value);
+                }}
                 startContent={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-printer-fill"
-                    viewBox="0 0 16 16">
-                    <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
-                    <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-                  </svg>
+                  <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
                 }
-                onClick={handlePrint}>
-                Print
+              />
+              <Button
+                color="success"
+                variant="ghost"
+                onClick={() => handleModal(true)}>
+                ADD
               </Button>
+              <div>
+                <Button
+                  variant="light"
+                  startContent={
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-printer-fill"
+                      viewBox="0 0 16 16">
+                      <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+                      <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                    </svg>
+                  }
+                  onClick={handlePrint}>
+                  Print
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex gap-2 justify-between items-center w-full">
-          <div className="flex gap-2 w-3/4">
+        <div className="flex flex-col md:flex-row gap-2 justify-between items-center w-full">
+          <div className="flex gap-2 w-full md:w-3/4">
             <div className="flex flex-col gap-2 w-1/2">
               <label htmlFor="" className="ps-2">
                 Barangay
@@ -258,7 +260,7 @@ export default function PersonOfConcern({ accessToken }) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 w-32">
+          <div className="flex flex-col gap-2 w-full md:w-32">
             <label htmlFor="" className="ps-2">
               Action
             </label>

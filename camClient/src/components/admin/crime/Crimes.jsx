@@ -165,8 +165,8 @@ export default function Crimes({ accessToken }) {
           </div>
 
           <div className="mt-2">
-            <div className="flex gap-2 justify-end items-center w-full">
-              <div className="flex flex-col gap-2 w-1/2">
+            <div className="flex flex-col md:flex-row gap-2 justify-end items-center w-full">
+              <div className="flex flex-col gap-2 w-full md:w-1/2">
                 <label htmlFor="" className="ps-2">
                   Barangay
                 </label>
@@ -178,7 +178,7 @@ export default function Crimes({ accessToken }) {
                 />
               </div>
 
-              <div className="flex flex-col gap-2 w-1/2">
+              <div className="flex flex-col gap-2 w-full md:w-1/2">
                 <label htmlFor="" className="ps-2">
                   Crime Type
                 </label>
@@ -215,7 +215,7 @@ export default function Crimes({ accessToken }) {
                 </div>
               )}
 
-              <div className="flex flex-col gap-2 w-1/2">
+              <div className="flex flex-col gap-2 w-full md:w-1/2">
                 <label htmlFor="" className="ps-2">
                   Year
                 </label>
@@ -225,7 +225,7 @@ export default function Crimes({ accessToken }) {
                   onChange={(e) => setYear(e.value)}></Select>
               </div>
 
-              <div className="flex flex-col gap-2 w-1/2">
+              <div className="flex flex-col gap-2 w-full md:w-1/2">
                 <label htmlFor="" className="ps-2">
                   Month
                 </label>
@@ -234,7 +234,7 @@ export default function Crimes({ accessToken }) {
                   value={{ label: month, value: month }}
                   onChange={(e) => setMonth(e.label)}></Select>
               </div>
-              <div className="flex flex-col gap-2 w-32">
+              <div className="flex flex-col gap-2 w-full md:w-32">
                 <label htmlFor="" className="ps-2">
                   Action
                 </label>

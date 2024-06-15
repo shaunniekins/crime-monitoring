@@ -37,7 +37,7 @@ export function CustomTooltip2({ active, payload, label, e }) {
         {payload[0].payload.offenses &&
           Object.entries(payload[0].payload.offenses).map(
             ([offense, count]) => (
-              <div className="border-b-1 border-slate-200 ps-2">
+              <div key={offense} className="border-b-1 border-slate-200 ps-2">
                 <p>
                   <span className="font-semibold">Offence:</span> {offense} (
                   <span className="font-bold">{count}</span> cases)
